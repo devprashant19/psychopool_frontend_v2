@@ -4,12 +4,18 @@ import { useGame } from '@/contexts/GameContext';
 import { Trophy, Medal, Crown } from 'lucide-react';
 
 const LeaderboardScreen: React.FC = () => {
-  const { players, currentPlayer, gameState } = useGame();
+  // 1. Get real data from context
+  const { players, myPlayerId, gameState } = useGame();
 
+  // 2. Sort players by score
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+  
+  // 3. Slice for Top 3 vs List
   const top3 = sortedPlayers.slice(0, 3);
   const restPlayers = sortedPlayers.slice(3);
-  const currentPlayerRank = sortedPlayers.findIndex((p) => p.id === currentPlayer?.id) + 1;
+  
+  // 4. FIX: Use 'userId' instead of 'id' to find rank
+  const currentPlayerRank = sortedPlayers.findIndex((p) => p.userId === myPlayerId) + 1;
 
   const rankIcons = [
     <Crown className="w-8 h-8" />,
@@ -52,15 +58,19 @@ const LeaderboardScreen: React.FC = () => {
         <div className="flex justify-center items-end gap-4 mb-8 h-48">
           {[1, 0, 2].map((podiumIndex) => {
             const player = top3[podiumIndex];
+            
+            // If no player for this rank yet, render spacer
             if (!player) return <div key={podiumIndex} className="w-24" />;
 
             const heights = ['h-32', 'h-40', 'h-24'];
             const delays = [0.2, 0, 0.4];
-            const isCurrentUser = player.id === currentPlayer?.id;
+            // FIX: Use 'userId' 
+            const isCurrentUser = player.userId === myPlayerId;
 
             return (
               <motion.div
-                key={player.id}
+                // FIX: Use 'userId'
+                key={player.userId || podiumIndex}
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: delays[podiumIndex], duration: 0.5 }}
@@ -75,8 +85,9 @@ const LeaderboardScreen: React.FC = () => {
                   <span className={`block ${rankColors[podiumIndex]}`}>
                     {rankIcons[podiumIndex]}
                   </span>
+                  {/* FIX: Use 'player.name' instead of 'player.nickname' */}
                   <p className={`font-display font-bold text-sm mt-1 ${isCurrentUser ? 'text-neon-cyan' : 'text-foreground'}`}>
-                    {player.nickname}
+                    {player.name}
                   </p>
                   <p className="text-muted-foreground text-xs font-display">
                     {player.score} pts
@@ -106,8 +117,8 @@ const LeaderboardScreen: React.FC = () => {
           })}
         </div>
 
-        {/* Current player rank highlight */}
-        {currentPlayerRank > 3 && currentPlayer && (
+        {/* Current player rank highlight (Floating Sticky Bar) */}
+        {currentPlayerRank > 3 && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -119,9 +130,14 @@ const LeaderboardScreen: React.FC = () => {
                 <span className="w-8 h-8 rounded-full bg-neon-cyan/20 flex items-center justify-center font-display font-bold text-neon-cyan">
                   {currentPlayerRank}
                 </span>
-                <span className="font-semibold text-neon-cyan">{currentPlayer.nickname} (You)</span>
+                {/* FIX: Access name from players array using ID */}
+                <span className="font-semibold text-neon-cyan">
+                  {players.find(p => p.userId === myPlayerId)?.name} (You)
+                </span>
               </div>
-              <span className="font-display font-bold text-neon-cyan">{currentPlayer.score} pts</span>
+              <span className="font-display font-bold text-neon-cyan">
+                {players.find(p => p.userId === myPlayerId)?.score} pts
+              </span>
             </div>
           </motion.div>
         )}
@@ -130,10 +146,13 @@ const LeaderboardScreen: React.FC = () => {
         <div className="flex-1 overflow-auto">
           <div className="space-y-2">
             {restPlayers.map((player, index) => {
-              const isCurrentUser = player.id === currentPlayer?.id;
+              // FIX: Use 'userId'
+              const isCurrentUser = player.userId === myPlayerId;
+              
               return (
                 <motion.div
-                  key={player.id}
+                  // FIX: Use 'userId'
+                  key={player.userId}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 + index * 0.1 }}
@@ -148,7 +167,8 @@ const LeaderboardScreen: React.FC = () => {
                       {index + 4}
                     </span>
                     <span className={`font-medium ${isCurrentUser ? 'text-neon-cyan' : 'text-foreground'}`}>
-                      {player.nickname}
+                      {/* FIX: Use 'player.name' */}
+                      {player.name}
                       {isCurrentUser && ' (You)'}
                     </span>
                   </div>

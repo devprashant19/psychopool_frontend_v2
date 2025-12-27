@@ -6,6 +6,8 @@ import LobbyScreen from './LobbyScreen';
 import RoundLoadingScreen from './RoundLoadingScreen';
 import QuestionScreen from './QuestionScreen';
 import LeaderboardScreen from './LeaderboardScreen';
+// 1. IMPORT THE NEW SCREEN
+import ResultScreen from './ResultScreen'; 
 
 const PlayerView: React.FC = () => {
   const { gameState } = useGame();
@@ -20,6 +22,11 @@ const PlayerView: React.FC = () => {
         return <RoundLoadingScreen />;
       case 'QUESTION_ACTIVE':
         return <QuestionScreen />;
+      
+      // 2. ADD THIS CASE
+      case 'WAITING_RESULT':
+        return <ResultScreen />;
+        
       case 'LEADERBOARD':
       case 'GAME_OVER':
         return <LeaderboardScreen />;

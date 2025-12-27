@@ -1,36 +1,31 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { HelmetProvider } from "react-helmet-async";
-import { GameProvider } from "@/contexts/GameContext";
-import Index from "./pages/Index";
-import PlayerPage from "./pages/PlayerPage";
-import AdminPage from "./pages/AdminPage";
-import NotFound from "./pages/NotFound";
+import React, { useEffect, useState } from 'react';
+import socketService from './services/socketService';
+import { GameProvider } from './contexts/GameContext';
+import PlayerView from './components/player/PlayerView';
+import AdminDashboard from './components/admin/AdminDashboard';
 
-const queryClient = new QueryClient();
+const App: React.FC = () => {
+  const [isAdminMode, setIsAdminMode] = useState(false);
 
-const App = () => (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <GameProvider>
-        <TooltipProvider>
-          <BrowserRouter>
-            <Toaster />
-            <Sonner />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/play" element={<PlayerPage />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </GameProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
-);
+  useEffect(() => {
+    // 1. Connect to Backend
+    // Use env variable if available, otherwise localhost
+    const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+    socketService.connect(url);
+
+    // 2. Check if URL ends with "/admin"
+    if (window.location.pathname === '/admin') {
+      setIsAdminMode(true);
+    }
+  }, []);
+
+  return (
+    <GameProvider>
+      <div className="min-h-screen bg-background text-foreground font-sans antialiased">
+        {isAdminMode ? <AdminDashboard /> : <PlayerView />}
+      </div>
+    </GameProvider>
+  );
+};
 
 export default App;

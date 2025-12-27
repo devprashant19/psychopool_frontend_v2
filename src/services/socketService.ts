@@ -1,93 +1,159 @@
-import { io, Socket } from 'socket.io-client';
+import { io, Socket } from "socket.io-client";
 
-// Configuration - change this to your backend URL
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
-
-// Socket instance (will be null until connected)
-let socket: Socket | null = null;
-
-// Game state types
+// --- 1. GAME STATE ---
 export type GameState = 
-  | 'DISCONNECTED'
+  | 'DISCONNECTED' 
   | 'LOBBY' 
   | 'ROUND_LOADING' 
   | 'QUESTION_ACTIVE' 
+  | 'WAITING_RESULT' 
   | 'LEADERBOARD' 
   | 'GAME_OVER';
 
-export interface Player {
-  id: string;
-  nickname: string;
-  score: number;
-  rank?: number;
-  lastAnswerCorrect?: boolean;
-  lastAnswerTime?: number;
-}
-
-export interface Question {
+// --- 2. DATA TYPES ---
+export interface QuestionData {
   id: string;
   text: string;
   options: string[];
   timeLimit: number;
-  correctAnswer?: number;
+  correctAnswer?: number; 
+}
+export type Question = QuestionData;
+
+export interface LeaderboardEntry {
+  userId: string;
+  name: string;
+  score: number;
+  rank?: number;
+  lastAnswerCorrect?: boolean;
+}
+export type Player = LeaderboardEntry;
+
+// --- 3. SOCKET EVENT INTERFACES ---
+interface ServerToClientEvents {
+  connect: () => void;
+  disconnect: () => void;
+  join_success: (data: { playerId: string }) => void;
+  player_count_update: (count: number) => void;
+  round_start: (data: { round: number }) => void;
+  new_question: (data: Question) => void;
+  
+  // Standard Quiz Result (Optional now, since we use minority_result)
+  answer_result: (data: { isCorrect: boolean; correctAnswer: number; scoreDelta: number }) => void;
+  
+  // Minority Game Result Payload
+  minority_result: (data: { 
+    voteCounts: Record<string, number>; 
+    winningOptions: string[]; 
+  }) => void;
+
+  show_leaderboard: (data: Player[]) => void;
+  round_over: () => void;
+  game_reset: () => void; 
+
+  // ADMIN LOGIN EVENTS
+  admin_login_success: () => void;
+  admin_login_fail: () => void;
+
+  // STATE SYNC EVENT (For Admin Refresh)
+  admin_state_sync: (data: { 
+    phase: GameState; 
+    round: number; 
+    question: Question | null; 
+    result: { voteCounts: Record<string, number>; winningOptions: string[] } | null; 
+  }) => void;
+
+  // --- NEW: PLAYER RECONNECT EVENTS ---
+  player_reconnect_success: (data: { 
+    playerId: string;
+    name: string;
+    score: number;
+    phase: GameState; 
+    round: number; 
+    question: Question | null; 
+    result: { voteCounts: Record<string, number>; winningOptions: string[] } | null; 
+  }) => void;
+
+  player_reconnect_fail: () => void;
 }
 
-export interface GameData {
-  state: GameState;
-  currentRound: number;
-  totalRounds: number;
-  players: Player[];
-  currentQuestion: Question | null;
-  timeRemaining: number;
+interface ClientToServerEvents {
+  join_game: (data: { name: string }) => void;
+  submit_answer: (data: { playerId: string; questionId: string; answer: string; timeTaken?: number }) => void;
+  
+  admin_start_round: (data: { roundNumber: number }) => void;
+  admin_next_question: () => void;
+  admin_reveal_results: () => void;
+  admin_show_leaderboard: () => void;
+  admin_end_round: () => void;
+  admin_reset_game: () => void;
+  admin_login: (password: string) => void;
+
+  // --- NEW: PLAYER RECONNECT COMMAND ---
+  player_reconnect: (playerId: string) => void;
 }
 
-// Socket event types
-export interface ServerToClientEvents {
-  'game:state': (data: GameData) => void;
-  'game:countdown': (seconds: number) => void;
-  'player:joined': (player: Player) => void;
-  'player:left': (playerId: string) => void;
-  'answer:result': (data: { correct: boolean; points: number }) => void;
-}
+// --- 4. THE SERVICE CLASS ---
+class SocketService {
+  public socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null;
+  private pendingListeners: Array<{ event: string, callback: any }> = [];
 
-export interface ClientToServerEvents {
-  'player:join': (nickname: string) => void;
-  'player:answer': (data: { questionId: string; answerIndex: number }) => void;
-  'admin:start-round': () => void;
-  'admin:next-question': () => void;
-  'admin:show-leaderboard': () => void;
-  'admin:end-round': () => void;
-}
-
-// Connect to the socket server
-export const connectSocket = (): Socket => {
-  if (!socket) {
-    socket = io(BACKEND_URL, {
+  connect(url: string): void {
+    if (this.socket) return;
+    
+    this.socket = io(url, {
+      transports: ["websocket"],
       autoConnect: false,
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
     });
+
+    this.pendingListeners.forEach(({ event, callback }) => {
+      // @ts-ignore
+      this.socket?.on(event, callback);
+    });
+    this.pendingListeners = [];
+
+    this.socket.on("connect", () => {
+      console.log("✅ Socket Connected:", this.socket?.id);
+    });
+
+    this.socket.connect();
   }
-  
-  if (!socket.connected) {
-    socket.connect();
+
+  disconnect(): void {
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
   }
-  
-  return socket;
-};
 
-// Disconnect from the socket server
-export const disconnectSocket = (): void => {
-  if (socket) {
-    socket.disconnect();
+  isConnected(): boolean {
+    return this.socket?.connected || false;
   }
-};
 
-// Get the socket instance
-export const getSocket = (): Socket | null => socket;
+  emit<T extends keyof ClientToServerEvents>(
+    event: T, 
+    ...args: Parameters<ClientToServerEvents[T]>
+  ): void {
+    this.socket?.emit(event, ...args);
+  }
 
-// Check if connected
-export const isConnected = (): boolean => socket?.connected ?? false;
+  on<T extends keyof ServerToClientEvents>(
+    event: T, 
+    callback: ServerToClientEvents[T]
+  ): void {
+    if (this.socket) {
+      // @ts-ignore
+      this.socket.on(event, callback);
+    } else {
+      console.log(`⏳ Queueing listener for: ${event}`);
+      this.pendingListeners.push({ event, callback });
+    }
+  }
 
-export { BACKEND_URL };
+  off<T extends keyof ServerToClientEvents>(event: T): void {
+    this.socket?.off(event);
+  }
+}
+
+const socketService = new SocketService();
+export default socketService;

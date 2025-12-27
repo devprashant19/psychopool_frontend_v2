@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useGame } from '@/contexts/GameContext';
-import { Check, X } from 'lucide-react';
+import { Check, X, Loader2 } from 'lucide-react';
+import socketService from '@/services/socketService';
 
 const optionColors = [
   { bg: 'bg-neon-red/20', border: 'border-neon-red', text: 'text-neon-red', shadow: 'shadow-[0_0_20px_hsl(var(--neon-red)/0.5)]' },
@@ -11,15 +12,56 @@ const optionColors = [
 ];
 
 const QuestionScreen: React.FC = () => {
-  const { currentQuestion, timeRemaining, selectedAnswer, answerResult, submitAnswer } = useGame();
+  // 1. Get submitAnswer from Context (it holds your real Player ID)
+  const { currentQuestion, submitAnswer } = useGame();
+  
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+  const [isLocked, setIsLocked] = useState(false);
+  const [serverResult, setServerResult] = useState<{ correct: boolean; correctAnswer: number } | null>(null);
+  const [timeLeft, setTimeLeft] = useState(currentQuestion?.timeLimit || 15);
 
-  if (!currentQuestion) return null;
+  useEffect(() => {
+    if (!currentQuestion) return;
+    
+    // Reset state for new question
+    setSelectedIdx(null);
+    setIsLocked(false);
+    setServerResult(null);
+    setTimeLeft(currentQuestion.timeLimit);
 
-  const progressPercent = (timeRemaining / currentQuestion.timeLimit) * 100;
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    // Listen for the result from server
+    const handleResult = (data: any) => {
+       setServerResult({ correct: data.isCorrect, correctAnswer: data.correctAnswer });
+    };
+
+    socketService.on("answer_result", handleResult);
+
+    return () => {
+      clearInterval(timer);
+      socketService.off("answer_result"); // Cleanup listener
+    };
+  }, [currentQuestion]);
+
+  const handleOptionClick = (index: number, optionText: string) => {
+    if (isLocked) return;
+
+    setSelectedIdx(index);
+    setIsLocked(true); 
+
+    // 2. USE THE CONTEXT FUNCTION (This uses your Real ID)
+    submitAnswer(optionText);
+  };
+
+  if (!currentQuestion) return <div>Loading Question...</div>;
+
+  const progressPercent = (timeLeft / currentQuestion.timeLimit) * 100;
 
   return (
     <div className="min-h-screen flex flex-col p-4 pt-6 bg-background relative overflow-hidden">
-      {/* Background effects */}
       <div className="absolute inset-0 bg-grid opacity-50" />
 
       <div className="relative z-10 flex flex-col h-full">
@@ -28,27 +70,15 @@ const QuestionScreen: React.FC = () => {
           <div className="h-3 bg-muted rounded-full overflow-hidden">
             <motion.div
               className={`h-full rounded-full transition-colors duration-300 ${
-                progressPercent > 50
-                  ? 'bg-neon-green'
-                  : progressPercent > 25
-                  ? 'bg-neon-yellow'
-                  : 'bg-neon-red'
+                progressPercent > 50 ? 'bg-neon-green' : progressPercent > 25 ? 'bg-neon-yellow' : 'bg-neon-red'
               }`}
-              style={{
-                width: `${progressPercent}%`,
-                boxShadow:
-                  progressPercent > 50
-                    ? '0 0 15px hsl(var(--neon-green))'
-                    : progressPercent > 25
-                    ? '0 0 15px hsl(var(--neon-yellow))'
-                    : '0 0 15px hsl(var(--neon-red))',
-              }}
+              style={{ width: `${progressPercent}%` }}
               animate={{ width: `${progressPercent}%` }}
               transition={{ duration: 0.5 }}
             />
           </div>
           <div className="flex justify-between mt-2 text-sm text-muted-foreground font-display">
-            <span>{timeRemaining}s</span>
+            <span>{timeLeft}s</span>
             <span>Question {currentQuestion.id}</span>
           </div>
         </div>
@@ -69,57 +99,49 @@ const QuestionScreen: React.FC = () => {
         {/* Answer options */}
         <div className="flex-1 grid grid-cols-1 gap-3">
           {currentQuestion.options.map((option, index) => {
-            const color = optionColors[index];
-            const isSelected = selectedAnswer === index;
-            const isCorrect = currentQuestion.correctAnswer === index;
-            const showResult = selectedAnswer !== null;
+            const color = optionColors[index % 4];
+            
+            const isSelected = selectedIdx === index;
+            // Only reveal answer if we have the server result
+            const isCorrect = serverResult?.correctAnswer === index; 
+            const showResult = serverResult !== null; 
+
+            let buttonStyle = `border-border bg-card/50 hover:${color.border} hover:${color.bg}`;
+            
+            if (isSelected) {
+               // Selected but waiting
+               buttonStyle = `${color.border} ${color.bg} ${color.shadow}`;
+            }
+            
+            if (showResult) {
+               if (isCorrect) buttonStyle = 'border-neon-green bg-neon-green/20 shadow-[0_0_25px_hsl(var(--neon-green)/0.6)]';
+               else if (isSelected && !serverResult.correct) buttonStyle = 'border-neon-red bg-neon-red/20 shadow-[0_0_25px_hsl(var(--neon-red)/0.6)]';
+               else buttonStyle = 'opacity-50 border-border';
+            }
 
             return (
               <motion.button
                 key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                onClick={() => submitAnswer(index)}
-                disabled={selectedAnswer !== null}
+                onClick={() => handleOptionClick(index, option)}
+                disabled={isLocked}
                 className={`
                   relative w-full p-4 rounded-xl border-2 font-semibold text-lg
                   transition-all duration-300 text-left
-                  ${
-                    showResult
-                      ? isCorrect
-                        ? 'border-neon-green bg-neon-green/20 shadow-[0_0_25px_hsl(var(--neon-green)/0.6)]'
-                        : isSelected
-                        ? 'border-neon-red bg-neon-red/20 shadow-[0_0_25px_hsl(var(--neon-red)/0.6)]'
-                        : 'border-border bg-muted/30 opacity-50'
-                      : isSelected
-                      ? `${color.border} ${color.bg} ${color.shadow}`
-                      : `border-border bg-card/50 hover:${color.border} hover:${color.bg}`
-                  }
+                  ${buttonStyle}
                   disabled:cursor-default
                 `}
-                whileHover={!showResult ? { scale: 1.02 } : {}}
-                whileTap={!showResult ? { scale: 0.98 } : {}}
+                whileHover={!isLocked ? { scale: 1.02 } : {}}
+                whileTap={!isLocked ? { scale: 0.98 } : {}}
               >
                 <div className="flex items-center gap-4">
-                  <span
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center font-display font-bold text-lg ${
-                      showResult
-                        ? isCorrect
-                          ? 'bg-neon-green text-background'
-                          : isSelected
-                          ? 'bg-neon-red text-background'
-                          : 'bg-muted text-muted-foreground'
-                        : `${color.bg} ${color.text}`
-                    }`}
-                  >
-                    {showResult && isCorrect ? (
-                      <Check className="w-5 h-5" />
-                    ) : showResult && isSelected && !isCorrect ? (
-                      <X className="w-5 h-5" />
-                    ) : (
-                      String.fromCharCode(65 + index)
-                    )}
+                  <span className={`
+                    w-10 h-10 rounded-lg flex items-center justify-center font-display font-bold text-lg
+                    ${isSelected || (showResult && isCorrect) ? 'text-background' : color.text}
+                    ${showResult && isCorrect ? 'bg-neon-green' : isSelected ? color.bg.replace('/20', '') : color.bg}
+                  `}>
+                    {showResult && isCorrect ? <Check className="w-5 h-5" /> : 
+                     showResult && isSelected && !serverResult.correct ? <X className="w-5 h-5" /> : 
+                     String.fromCharCode(65 + index)}
                   </span>
                   <span className="flex-1 text-foreground">{option}</span>
                 </div>
@@ -128,34 +150,14 @@ const QuestionScreen: React.FC = () => {
           })}
         </div>
 
-        {/* Result feedback */}
-        {answerResult && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-4 text-center"
-          >
-            <div
-              className={`inline-flex items-center gap-2 px-6 py-3 rounded-full font-display font-bold text-lg ${
-                answerResult.correct
-                  ? 'bg-neon-green/20 text-neon-green neon-border-green border'
-                  : 'bg-neon-red/20 text-neon-red border border-neon-red'
-              }`}
-            >
-              {answerResult.correct ? (
-                <>
-                  <Check className="w-5 h-5" />
-                  +{answerResult.points} points!
-                </>
-              ) : (
-                <>
-                  <X className="w-5 h-5" />
-                  Wrong answer
-                </>
-              )}
-            </div>
-          </motion.div>
+        {/* Status Footer */}
+        {isLocked && !serverResult && (
+           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 text-center flex items-center justify-center gap-2 text-muted-foreground">
+             <Loader2 className="w-4 h-4 animate-spin" />
+             Answer Locked. Waiting for score...
+           </motion.div>
         )}
+
       </div>
     </div>
   );
