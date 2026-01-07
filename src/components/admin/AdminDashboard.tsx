@@ -147,7 +147,7 @@ const AdminDashboard: React.FC = () => {
         <div className="flex items-center gap-4">
           <Zap className="w-10 h-10 text-neon-cyan" />
           <div>
-            <h1 className="text-3xl font-display font-bold neon-text-cyan">QuizSync</h1>
+            <h1 className="text-3xl font-display font-bold neon-text-cyan">Psycho Pool</h1>
             <div className="flex items-center gap-2">
               <p className="text-muted-foreground">Admin Control Panel</p>
               <span className="flex items-center text-xs text-neon-green bg-neon-green/10 px-2 py-0.5 rounded-full border border-neon-green/20">
