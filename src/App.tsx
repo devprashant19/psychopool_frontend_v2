@@ -10,7 +10,7 @@ const App: React.FC = () => {
   useEffect(() => {
     // 1. Connect to Backend
     // Use env variable if available, otherwise localhost
-    const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+    const url = import.meta.env.VITE_BACKEND_URL;
     socketService.connect(url);
 
     // 2. Check if URL ends with "/admin"
