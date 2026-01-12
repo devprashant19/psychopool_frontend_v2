@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '@/contexts/GameContext';
 
 const RoundLoadingScreen: React.FC = () => {
-  const { currentRound, countdown } = useGame();
+  // 1. Remove 'countdown' from context (it doesn't exist there)
+  const { currentRound } = useGame();
+  
+  // 2. Add Local State for the visual countdown
+  const [count, setCount] = useState(3);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0; // Stops at 0
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background relative overflow-hidden">
@@ -78,16 +96,26 @@ const RoundLoadingScreen: React.FC = () => {
           {/* Countdown number */}
           <div className="absolute inset-0 flex items-center justify-center">
             <AnimatePresence mode="wait">
-              <motion.span
-                key={countdown}
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 1.5, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="text-8xl font-display font-black neon-text-cyan"
-              >
-                {countdown}
-              </motion.span>
+              {count > 0 ? (
+                <motion.span
+                  key={count}
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 1.5, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-8xl font-display font-black neon-text-cyan"
+                >
+                  {count}
+                </motion.span>
+              ) : (
+                <motion.span
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="text-2xl font-display font-bold text-white animate-pulse"
+                >
+                  GO!
+                </motion.span>
+              )}
             </AnimatePresence>
           </div>
         </div>
@@ -99,7 +127,7 @@ const RoundLoadingScreen: React.FC = () => {
           transition={{ duration: 1.5, repeat: Infinity }}
           className="mt-8 text-lg text-muted-foreground font-display"
         >
-          Starting Soon...
+          {count > 0 ? "Starting Soon..." : "Waiting for Host..."}
         </motion.p>
       </div>
 

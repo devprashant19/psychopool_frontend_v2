@@ -7,21 +7,23 @@ const LeaderboardScreen: React.FC = () => {
   // 1. Get real data from context
   const { players, myPlayerId, gameState } = useGame();
 
-  // 2. Sort players by score
+  // 2. Sort players by score (Safety check, though backend sends sorted)
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
   
   // 3. Slice for Top 3 vs List
   const top3 = sortedPlayers.slice(0, 3);
   const restPlayers = sortedPlayers.slice(3);
   
-  // 4. FIX: Use 'userId' instead of 'id' to find rank
-  const currentPlayerRank = sortedPlayers.findIndex((p) => p.userId === myPlayerId) + 1;
+  // 4. Get Current Player Data (to read their Rank)
+  const currentPlayer = sortedPlayers.find((p) => p.userId === myPlayerId);
+  const myRank = currentPlayer?.rank || 0;
 
-  const rankIcons = [
-    <Crown className="w-8 h-8" />,
-    <Medal className="w-7 h-7" />,
-    <Medal className="w-6 h-6" />,
-  ];
+  // Helper to get icon based on Actual Rank (not just position)
+  const getRankIcon = (rank: number) => {
+    if (rank === 1) return <Crown className="w-8 h-8" />;
+    if (rank === 2) return <Medal className="w-7 h-7" />;
+    return <Medal className="w-6 h-6" />;
+  };
 
   const rankColors = [
     'text-neon-yellow neon-text-yellow',
@@ -56,20 +58,23 @@ const LeaderboardScreen: React.FC = () => {
 
         {/* Top 3 Podium */}
         <div className="flex justify-center items-end gap-4 mb-8 h-48">
+          {/* We map strictly to positions: Left(1), Center(0), Right(2) */}
           {[1, 0, 2].map((podiumIndex) => {
             const player = top3[podiumIndex];
             
-            // If no player for this rank yet, render spacer
+            // If no player for this slot, render spacer
             if (!player) return <div key={podiumIndex} className="w-24" />;
 
             const heights = ['h-32', 'h-40', 'h-24'];
             const delays = [0.2, 0, 0.4];
-            // FIX: Use 'userId' 
             const isCurrentUser = player.userId === myPlayerId;
+            
+            // Visual Styling based on Podium Position (Gold/Silver/Bronze look)
+            // Note: Even if tied for 1st, the center podium still looks "Gold"
+            const visualColorClass = rankColors[podiumIndex];
 
             return (
               <motion.div
-                // FIX: Use 'userId'
                 key={player.userId || podiumIndex}
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -82,10 +87,11 @@ const LeaderboardScreen: React.FC = () => {
                   transition={{ duration: 2, repeat: Infinity }}
                   className="mb-2 text-center"
                 >
-                  <span className={`block ${rankColors[podiumIndex]}`}>
-                    {rankIcons[podiumIndex]}
+                  <span className={`block ${visualColorClass}`}>
+                    {/* Icon based on actual RANK, not position */}
+                    {getRankIcon(player.rank || podiumIndex + 1)}
                   </span>
-                  {/* FIX: Use 'player.name' instead of 'player.nickname' */}
+                  
                   <p className={`font-display font-bold text-sm mt-1 ${isCurrentUser ? 'text-neon-cyan' : 'text-foreground'}`}>
                     {player.name}
                   </p>
@@ -108,7 +114,8 @@ const LeaderboardScreen: React.FC = () => {
                 >
                   <div className="flex items-center justify-center h-full">
                     <span className={`text-2xl font-display font-black ${podiumIndex === 0 ? 'text-neon-yellow' : 'text-muted-foreground'}`}>
-                      {podiumIndex === 0 ? '1' : podiumIndex === 1 ? '2' : '3'}
+                      {/* 👇 SHOW BACKEND RANK (Handles Ties) */}
+                      {player.rank}
                     </span>
                   </div>
                 </motion.div>
@@ -118,7 +125,8 @@ const LeaderboardScreen: React.FC = () => {
         </div>
 
         {/* Current player rank highlight (Floating Sticky Bar) */}
-        {currentPlayerRank > 3 && (
+        {/* Only show if they are NOT in the top 3 (index > 2) */}
+        {sortedPlayers.findIndex(p => p.userId === myPlayerId) > 2 && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -128,15 +136,14 @@ const LeaderboardScreen: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="w-8 h-8 rounded-full bg-neon-cyan/20 flex items-center justify-center font-display font-bold text-neon-cyan">
-                  {currentPlayerRank}
+                  {myRank}
                 </span>
-                {/* FIX: Access name from players array using ID */}
                 <span className="font-semibold text-neon-cyan">
-                  {players.find(p => p.userId === myPlayerId)?.name} (You)
+                  {currentPlayer?.name} (You)
                 </span>
               </div>
               <span className="font-display font-bold text-neon-cyan">
-                {players.find(p => p.userId === myPlayerId)?.score} pts
+                {currentPlayer?.score} pts
               </span>
             </div>
           </motion.div>
@@ -146,12 +153,10 @@ const LeaderboardScreen: React.FC = () => {
         <div className="flex-1 overflow-auto">
           <div className="space-y-2">
             {restPlayers.map((player, index) => {
-              // FIX: Use 'userId'
               const isCurrentUser = player.userId === myPlayerId;
               
               return (
                 <motion.div
-                  // FIX: Use 'userId'
                   key={player.userId}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -164,10 +169,10 @@ const LeaderboardScreen: React.FC = () => {
                 >
                   <div className="flex items-center gap-3">
                     <span className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-sm font-display font-semibold text-muted-foreground">
-                      {index + 4}
+                      {/* 👇 USE BACKEND RANK (Handles Ties) */}
+                      {player.rank}
                     </span>
                     <span className={`font-medium ${isCurrentUser ? 'text-neon-cyan' : 'text-foreground'}`}>
-                      {/* FIX: Use 'player.name' */}
                       {player.name}
                       {isCurrentUser && ' (You)'}
                     </span>

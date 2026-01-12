@@ -209,7 +209,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const revealResults = () => {
     socketService.emit("admin_reveal_results");
   };
-
+  console.log("Attempting to connect to:", BACKEND_URL);
   return (
     <GameContext.Provider value={{
       gameState,
