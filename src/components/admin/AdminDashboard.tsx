@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useGame } from '@/contexts/GameContext';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input'; // Ensure you have this or use standard <input>
+import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import socketService from '@/services/socketService';
 import { 
@@ -11,25 +11,20 @@ import {
   Trophy, 
   StopCircle, 
   Users, 
-  Target,
   Zap,
   RotateCcw,
   Eye,
-  BarChart3,
   Wifi,
   WifiOff,
   Lock,
-  LogIn
+  Flame, // Imported for Chaos Mode
+  Gem    // Imported for Normal Mode (if using lucide-react latest, otherwise use emoji)
 } from 'lucide-react';
 
 const AdminDashboard: React.FC = () => {
   const { 
     gameState, 
-    currentRound, 
-    totalRounds, 
     playerCount, 
-    players, 
-    currentQuestion,
     minorityResult,
     startRound, 
     nextQuestion, 
@@ -43,15 +38,17 @@ const AdminDashboard: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [loginError, setLoginError] = useState("");
+  
+  // 👇 NEW: State for the Winning Mode
+  const [winningMode, setWinningMode] = useState<'MINORITY' | 'MAJORITY'>('MINORITY');
 
   // 1. Connection Check & Login Listeners
   useEffect(() => {
-    // Check connection pulse
     const interval = setInterval(() => {
       setIsConnected(socketService.isConnected());
     }, 1000);
 
-    // Listen for Login Success/Fail from Server
+    // Listen for Login Success
     socketService.on("admin_login_success", () => {
       console.log("🔓 Login Successful");
       setIsAuthenticated(true);
@@ -59,15 +56,28 @@ const AdminDashboard: React.FC = () => {
     });
 
     socketService.on("admin_login_fail", () => {
-      console.log("🔒 Login Failed");
       setLoginError("Incorrect Password");
       setIsAuthenticated(false);
+    });
+
+    // 👇 NEW: Listen for State Sync (Initial Load)
+    socketService.on("admin_state_sync", (data: any) => {
+      if (data.winningMode) {
+        setWinningMode(data.winningMode);
+      }
+    });
+
+    // 👇 NEW: Listen for Mode Toggles (Real-time update)
+    socketService.on("admin_mode_update", (newMode: 'MINORITY' | 'MAJORITY') => {
+      setWinningMode(newMode);
     });
 
     return () => {
       clearInterval(interval);
       socketService.off("admin_login_success");
       socketService.off("admin_login_fail");
+      socketService.off("admin_state_sync");
+      socketService.off("admin_mode_update");
     };
   }, []);
 
@@ -77,7 +87,6 @@ const AdminDashboard: React.FC = () => {
       setLoginError("Server disconnected. Cannot login.");
       return;
     }
-    // Send password to server
     socketService.emit("admin_login", passwordInput);
   };
 
@@ -87,7 +96,12 @@ const AdminDashboard: React.FC = () => {
     action();
   };
 
-  // --- VIEW 1: LOGIN SCREEN (If not authenticated) ---
+  // 👇 NEW: Toggle Handler
+  const toggleMode = () => {
+    socketService.emit("admin_toggle_mode");
+  };
+
+  // --- VIEW 1: LOGIN SCREEN ---
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
@@ -139,7 +153,7 @@ const AdminDashboard: React.FC = () => {
     );
   }
 
-  // --- VIEW 2: CONTROL DASHBOARD (If authenticated) ---
+  // --- VIEW 2: CONTROL DASHBOARD ---
   return (
     <div className="min-h-screen bg-background bg-grid p-6">
       {/* Header */}
@@ -194,8 +208,34 @@ const AdminDashboard: React.FC = () => {
               <CardTitle>Control Deck</CardTitle>
             </CardHeader>
             <CardContent>
+              {/* 👇 NEW: The Chaos Mode Toggle Button */}
+              <motion.div 
+                whileTap={{ scale: 0.98 }}
+                className="mb-6"
+              >
+                <Button
+                  onClick={toggleMode}
+                  className={`w-full h-16 text-lg font-bold uppercase tracking-wider border-2 transition-all duration-300 ${
+                    winningMode === 'MAJORITY' 
+                      ? 'bg-red-600 hover:bg-red-700 border-red-400 text-white shadow-[0_0_20px_rgba(220,38,38,0.5)]' 
+                      : 'bg-green-600 hover:bg-green-700 border-green-400 text-white shadow-[0_0_20px_rgba(22,163,74,0.5)]'
+                  }`}
+                >
+                  {winningMode === 'MAJORITY' ? (
+                    <div className="flex items-center gap-2">
+                      <Flame className="w-6 h-6 animate-pulse" /> 
+                      🔥 Chaos Mode: MAJORITY Wins
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Gem className="w-6 h-6" /> 
+                      💎 Normal Mode: MINORITY Wins
+                    </div>
+                  )}
+                </Button>
+              </motion.div>
+
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                
                 <Button
                   className="h-20 flex-col gap-2 bg-cyan-600 hover:bg-cyan-500 text-white"
                   onClick={() => handleAction("Start Round", startRound)}
@@ -244,24 +284,35 @@ const AdminDashboard: React.FC = () => {
           {minorityResult && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <Card className="card-glow border-neon-cyan/20">
-                <CardHeader><CardTitle>Vote Distribution</CardTitle></CardHeader>
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <CardTitle>Vote Distribution</CardTitle>
+                    {/* 👇 Display Active Mode in Results */}
+                    <span className={`text-xs font-bold px-2 py-1 rounded ${
+                      winningMode === 'MAJORITY' ? 'bg-red-500/20 text-red-500' : 'bg-green-500/20 text-green-500'
+                    }`}>
+                      {winningMode === 'MAJORITY' ? 'Winning: MOST Votes' : 'Winning: LEAST Votes'}
+                    </span>
+                  </div>
+                </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     {Object.entries(minorityResult.voteCounts).map(([option, count]) => {
                       const isWinner = minorityResult.winningOptions.includes(option);
-                      const maxVote = Math.max(...Object.values(minorityResult.voteCounts)) || 1;
+                      const maxVote = Math.max(...Object.values(minorityResult.voteCounts) as number[]) || 1;
+                      
                       return (
                         <div key={option} className="space-y-1">
                           <div className="flex justify-between text-sm">
                             <span className={isWinner ? "text-neon-green font-bold" : "text-muted-foreground"}>
                               {option} {isWinner && "(WINNER)"}
                             </span>
-                            <span>{count} votes</span>
+                            <span>{count as number} votes</span>
                           </div>
                           <div className="h-4 bg-muted/30 rounded-full">
                             <div 
-                              className={`h-full rounded-full ${isWinner ? "bg-neon-green" : "bg-neon-cyan/50"}`}
-                              style={{ width: `${(count / maxVote) * 100}%` }}
+                              className={`h-full rounded-full transition-all duration-500 ${isWinner ? "bg-neon-green shadow-[0_0_10px_rgba(34,197,94,0.5)]" : "bg-neon-cyan/50"}`}
+                              style={{ width: `${((count as number) / maxVote) * 100}%` }}
                             />
                           </div>
                         </div>

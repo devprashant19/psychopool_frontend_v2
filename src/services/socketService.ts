@@ -10,6 +10,8 @@ export type GameState =
   | 'LEADERBOARD' 
   | 'GAME_OVER';
 
+export type WinningMode = 'MINORITY' | 'MAJORITY'; // 👈 NEW TYPE
+
 // --- 2. DATA TYPES ---
 export interface QuestionData {
   id: string;
@@ -38,32 +40,37 @@ interface ServerToClientEvents {
   round_start: (data: { round: number }) => void;
   new_question: (data: Question) => void;
   
-  // Standard Quiz Result (Optional now, since we use minority_result)
+  // Standard Quiz Result (Optional now)
   answer_result: (data: { isCorrect: boolean; correctAnswer: number; scoreDelta: number }) => void;
   
-  // Minority Game Result Payload
+  // Minority Game Result Payload (Updated with Mode)
   minority_result: (data: { 
     voteCounts: Record<string, number>; 
-    winningOptions: string[]; 
+    winningOptions: string[];
+    mode?: WinningMode; // 👈 NEW: Shows if Majority or Minority won
   }) => void;
 
   show_leaderboard: (data: Player[]) => void;
   round_over: () => void;
   game_reset: () => void; 
 
-  // ADMIN LOGIN EVENTS
+  // ADMIN EVENTS
   admin_login_success: () => void;
   admin_login_fail: () => void;
+  
+  // 👈 NEW: Admin Mode Toggle Update
+  admin_mode_update: (mode: WinningMode) => void;
 
-  // STATE SYNC EVENT (For Admin Refresh)
+  // STATE SYNC EVENT (For Admin Refresh - Updated)
   admin_state_sync: (data: { 
     phase: GameState; 
     round: number; 
     question: Question | null; 
     result: { voteCounts: Record<string, number>; winningOptions: string[] } | null; 
+    winningMode?: WinningMode; // 👈 NEW: Syncs the button state
   }) => void;
 
-  // --- NEW: PLAYER RECONNECT EVENTS ---
+  // PLAYER RECONNECT EVENTS
   player_reconnect_success: (data: { 
     playerId: string;
     name: string;
@@ -88,8 +95,10 @@ interface ClientToServerEvents {
   admin_end_round: () => void;
   admin_reset_game: () => void;
   admin_login: (password: string) => void;
+  
+  // 👈 NEW: Command to toggle the mode
+  admin_toggle_mode: () => void;
 
-  // --- NEW: PLAYER RECONNECT COMMAND ---
   player_reconnect: (playerId: string) => void;
 }
 
