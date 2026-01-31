@@ -6,9 +6,6 @@ import socketService, {
   QuestionData 
 } from '@/services/socketService';
 
-// 👇 DEFINE YOUR BACKEND URL HERE
-// For local dev: "http://localhost:4000"
-// For production: "https://your-app-name.onrender.com"
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
 export interface MinorityResultData {

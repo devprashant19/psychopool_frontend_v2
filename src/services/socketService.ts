@@ -10,7 +10,7 @@ export type GameState =
   | 'LEADERBOARD' 
   | 'GAME_OVER';
 
-export type WinningMode = 'MINORITY' | 'MAJORITY'; // 👈 NEW TYPE
+export type WinningMode = 'MINORITY' | 'MAJORITY';
 
 // --- 2. DATA TYPES ---
 export interface QuestionData {
@@ -40,37 +40,30 @@ interface ServerToClientEvents {
   round_start: (data: { round: number }) => void;
   new_question: (data: Question) => void;
   
-  // Standard Quiz Result (Optional now)
   answer_result: (data: { isCorrect: boolean; correctAnswer: number; scoreDelta: number }) => void;
   
-  // Minority Game Result Payload (Updated with Mode)
   minority_result: (data: { 
     voteCounts: Record<string, number>; 
     winningOptions: string[];
-    mode?: WinningMode; // 👈 NEW: Shows if Majority or Minority won
+    mode?: WinningMode;
   }) => void;
 
   show_leaderboard: (data: Player[]) => void;
   round_over: () => void;
   game_reset: () => void; 
 
-  // ADMIN EVENTS
   admin_login_success: () => void;
   admin_login_fail: () => void;
-  
-  // 👈 NEW: Admin Mode Toggle Update
   admin_mode_update: (mode: WinningMode) => void;
 
-  // STATE SYNC EVENT (For Admin Refresh - Updated)
   admin_state_sync: (data: { 
     phase: GameState; 
     round: number; 
     question: Question | null; 
     result: { voteCounts: Record<string, number>; winningOptions: string[] } | null; 
-    winningMode?: WinningMode; // 👈 NEW: Syncs the button state
+    winningMode?: WinningMode;
   }) => void;
 
-  // PLAYER RECONNECT EVENTS
   player_reconnect_success: (data: { 
     playerId: string;
     name: string;
@@ -95,8 +88,6 @@ interface ClientToServerEvents {
   admin_end_round: () => void;
   admin_reset_game: () => void;
   admin_login: (password: string) => void;
-  
-  // 👈 NEW: Command to toggle the mode
   admin_toggle_mode: () => void;
 
   player_reconnect: (playerId: string) => void;
@@ -110,9 +101,14 @@ class SocketService {
   connect(url: string): void {
     if (this.socket) return;
     
+    // 👇 FIXED: Added Polling + Reconnection Logic
     this.socket = io(url, {
-      transports: ["websocket"],
-      autoConnect: false,
+      transports: ["polling", "websocket"], // Vital for Cloud Run
+      withCredentials: true,
+      autoConnect: true,
+      reconnection: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 1000,
     });
 
     this.pendingListeners.forEach(({ event, callback }) => {
@@ -125,7 +121,10 @@ class SocketService {
       console.log("✅ Socket Connected:", this.socket?.id);
     });
 
-    this.socket.connect();
+    // Debug connection errors
+    this.socket.on("connect_error", (err) => {
+      console.error("❌ Connection Error:", err.message);
+    });
   }
 
   disconnect(): void {
