@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import './gamified-theme.css'; // Import the new Arcade Theme
 import socketService from './services/socketService';
 import { GameProvider } from './contexts/GameContext';
 import PlayerView from './components/player/PlayerView';

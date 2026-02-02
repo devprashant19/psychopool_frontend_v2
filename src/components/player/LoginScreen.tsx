@@ -40,14 +40,15 @@ const LoginScreen: React.FC = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <Zap className="w-12 h-12 text-neon-cyan" style={{ filter: 'drop-shadow(0 0 10px hsl(var(--neon-cyan)))' }} />
+              <Zap className="w-16 h-16 text-neon-cyan animate-pulse-fast" style={{ filter: 'drop-shadow(0 0 10px hsl(var(--neon-cyan)))' }} />
             </motion.div>
             <h1 className="text-5xl font-display font-bold neon-text-cyan">
               Psycho Pool
             </h1>
+
           </div>
-          <p className="text-muted-foreground text-lg">
-            Real-time multiplayer trivia
+          <p className="text-glow-pink text-lg font-bold tracking-widest uppercase">
+            Enter name to begin
           </p>
         </motion.div>
 
@@ -59,18 +60,15 @@ const LoginScreen: React.FC = () => {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
-          <div className="relative">
+          <div className="relative box-arcade p-2">
             <Input
               type="text"
-              placeholder="Enter your nickname"
+              placeholder="PLAYER 1 NAME"
               value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              maxLength={20}
-              className="text-center text-xl"
+              onChange={(e) => setNickname(e.target.value.toUpperCase())}
+              maxLength={12}
+              className="text-center text-xl bg-transparent border-none text-white font-display uppercase tracking-widest placeholder:text-gray-600 focus-visible:ring-0"
             />
-            <div className="absolute -bottom-6 right-0 text-xs text-muted-foreground">
-              {nickname.length}/20
-            </div>
           </div>
 
           <motion.div
@@ -79,12 +77,12 @@ const LoginScreen: React.FC = () => {
           >
             <Button
               type="submit"
-              variant="neonCyan"
+              variant="ghost"
               size="xl"
-              className="w-full"
+              className="w-full btn-arcade h-16 text-xl animate-pulse"
               disabled={!nickname.trim()}
             >
-              Join Game
+              JOIN GAME
             </Button>
           </motion.div>
         </motion.form>

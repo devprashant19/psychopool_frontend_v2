@@ -7,7 +7,7 @@ import RoundLoadingScreen from './RoundLoadingScreen';
 import QuestionScreen from './QuestionScreen';
 import LeaderboardScreen from './LeaderboardScreen';
 // 1. IMPORT THE NEW SCREEN
-import ResultScreen from './ResultScreen'; 
+import ResultScreen from './ResultScreen';
 
 const PlayerView: React.FC = () => {
   const { gameState } = useGame();
@@ -22,11 +22,11 @@ const PlayerView: React.FC = () => {
         return <RoundLoadingScreen />;
       case 'QUESTION_ACTIVE':
         return <QuestionScreen />;
-      
+
       // 2. ADD THIS CASE
       case 'WAITING_RESULT':
         return <ResultScreen />;
-        
+
       case 'LEADERBOARD':
       case 'GAME_OVER':
         return <LeaderboardScreen />;
@@ -36,7 +36,7 @@ const PlayerView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen max-w-md mx-auto bg-background">
+    <div className="min-h-screen w-full md:max-w-4xl lg:max-w-7xl mx-auto bg-background gamified-theme input-scope transition-all duration-300">
       <AnimatePresence mode="wait">
         <motion.div
           key={gameState}

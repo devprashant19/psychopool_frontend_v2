@@ -10,7 +10,7 @@ const LobbyScreen: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center min-h-screen p-6 bg-grid">
-      
+
       {/* 1. Main Waiting Animation */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
@@ -22,13 +22,13 @@ const LobbyScreen: React.FC = () => {
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-0 rounded-full border-t-4 border-neon-cyan opacity-50"
+            className="absolute inset-0 rounded-md border-t-4 border-neon-cyan opacity-50"
           />
           {/* Inner Ring */}
           <motion.div
             animate={{ rotate: -360 }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-4 rounded-full border-b-4 border-neon-magenta opacity-50"
+            className="absolute inset-4 rounded-md border-b-4 border-neon-magenta opacity-50"
           />
           {/* Icon */}
           <Loader2 className="w-10 h-10 text-white animate-spin-slow" />
@@ -38,18 +38,18 @@ const LobbyScreen: React.FC = () => {
           <h2 className="text-3xl font-bold font-display tracking-wider text-white">
             YOU'RE IN!
           </h2>
-          <p className="text-muted-foreground animate-pulse">
-            Waiting for host to start...
+          <p className="text-neon-cyan animate-glitch font-bold uppercase tracking-widest">
+            WAITING FOR CHALLENGERS...
           </p>
         </div>
       </motion.div>
 
       {/* 2. Player Count Badge */}
-      <motion.div 
+      <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="mt-8 flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
+        className="mt-8 flex items-center gap-2 px-6 py-3 bg-black/50 border-2 border-neon-yellow shadow-[0_0_15px_rgba(255,255,0,0.3)] backdrop-blur-md skew-x-[-10deg]"
       >
         <Users className="w-4 h-4 text-neon-yellow" />
         <span className="font-bold text-neon-yellow">{playerCount}</span>
@@ -57,20 +57,22 @@ const LobbyScreen: React.FC = () => {
       </motion.div>
 
       {/* 3. Player List (The part causing your 'key' warning previously) */}
-      <div className="w-full max-w-md mt-8 grid grid-cols-2 gap-3 overflow-y-auto max-h-[300px] pr-2 scrollbar-hide">
+      <div className="w-full max-w-5xl mt-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 overflow-y-auto max-h-[60vh] pr-2 scrollbar-hide">
         {players.map((player, index) => (
           <motion.div
             // FIX: This 'key' prop MUST be unique. We use userId.
-            key={player.userId || index} 
+            key={player.userId || index}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="bg-card/30 border-white/5 backdrop-blur-sm">
+            <Card className="bg-black/40 border-b-2 border-r-2 border-neon-green/50 backdrop-blur-sm rounded-none">
               <CardContent className="p-3 flex items-center justify-center text-center">
-                <span className="font-medium text-sm truncate text-gray-300">
+                <span className="font-bold text-sm truncate text-neon-green font-display uppercase tracking-wider">
                   {player.name}
                 </span>
+                {/* Ready Indicator */}
+                <div className="w-2 h-2 ml-2 bg-neon-green rounded-full animate-ping" />
               </CardContent>
             </Card>
           </motion.div>
