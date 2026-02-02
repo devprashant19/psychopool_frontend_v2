@@ -213,7 +213,70 @@
   transition: transform 0.1s, box-shadow 0.1s;
 }
 
-.gamified-theme .btn-3d:active {
-  transform: translateY(4px);
-  box-shadow: 0 0 0 #000;
+/* Glassmorphism Card */
+.gamified-theme .glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+.gamified-theme .glass-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 0, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Gradient Avatar */
+.gamified-theme .avatar-gradient {
+  background: linear-gradient(135deg, var(--arcade-neon-cyan), var(--arcade-neon-purple));
+  box-shadow: 0 0 15px var(--arcade-neon-cyan);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Shine Effect */
+.gamified-theme .animate-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.gamified-theme .animate-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0) 100%);
+  transform: skewX(-25deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+
+  20% {
+    left: 200%;
+  }
+
+  100% {
+    left: 200%;
+  }
+}
+
+/* Confetti Particle (Basic CSS) */
+.gamified-theme .particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--arcade-neon-yellow);
+  pointer-events: none;
+  border-radius: 50%;
 }

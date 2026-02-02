@@ -42,6 +42,29 @@ const LeaderboardScreen: React.FC = () => {
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-3xl"
       />
 
+      {/* Dynamic Confetti (Simple CSS Particles) */}
+      {[...Array(20)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="particle"
+          initial={{ opacity: 0, y: -20, x: Math.random() * window.innerWidth }}
+          animate={{
+            opacity: [0, 1, 0],
+            y: ['0vh', '100vh'],
+            rotate: Math.random() * 360
+          }}
+          transition={{
+            duration: 2 + Math.random() * 3,
+            repeat: Infinity,
+            delay: Math.random() * 5
+          }}
+          style={{
+            left: `${Math.random() * 100}%`,
+            background: i % 3 === 0 ? 'var(--arcade-neon-pink)' : i % 3 === 1 ? 'var(--arcade-neon-cyan)' : 'var(--arcade-neon-yellow)'
+          }}
+        />
+      ))}
+
       <div className="relative z-10 flex flex-col h-full">
         {/* Header */}
         <motion.div
@@ -108,7 +131,7 @@ const LeaderboardScreen: React.FC = () => {
                   transition={{ delay: delays[podiumIndex] + 0.3, duration: 0.4 }}
                   className={`w-16 md:w-32 ${heights[podiumIndex]} 
                     ${podiumIndex === 0
-                      ? 'bg-gradient-to-b from-neon-yellow to-yellow-900 border-x-4 border-t-4 border-white'
+                      ? 'bg-gradient-to-b from-neon-yellow to-yellow-900 border-x-4 border-t-4 border-white animate-shine shadow-[0_0_50px_rgba(255,255,0,0.5)]'
                       : 'bg-gradient-to-b from-gray-400 to-gray-900 border-x-2 border-t-2 border-gray-400'
                     }
                     shadow-[0_0_30px_rgba(0,0,0,0.8)] relative overflow-hidden`}
@@ -162,26 +185,30 @@ const LeaderboardScreen: React.FC = () => {
               return (
                 <motion.div
                   key={player.userId}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ delay: 0.5 + index * 0.1 }}
-                  className={`flex items-center justify-between p-3 border-b border-white/10 ${isCurrentUser
-                    ? 'bg-neon-cyan/20 border-l-4 border-l-neon-cyan'
-                    : 'bg-transparent'
+                  className={`flex items-center justify-between p-4 rounded-xl glass-card border-l-4 ${isCurrentUser
+                    ? 'border-l-neon-cyan bg-neon-cyan/10'
+                    : 'border-l-transparent'
                     }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-sm font-display font-semibold text-muted-foreground">
-                      {/* 👇 USE BACKEND RANK (Handles Ties) */}
+                  <div className="flex items-center gap-4">
+                    {/* Gradient Avatar */}
+                    <div className="w-10 h-10 rounded-full avatar-gradient flex items-center justify-center font-display font-bold text-white shadow-md text-Shadow">
                       {player.rank}
-                    </span>
-                    <span className={`font-medium ${isCurrentUser ? 'text-neon-cyan' : 'text-foreground'}`}>
-                      {player.name}
-                      {isCurrentUser && ' (You)'}
-                    </span>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <span className={`font-bold text-lg tracking-wide ${isCurrentUser ? 'text-neon-cyan text-glow-cyan' : 'text-white'}`}>
+                        {player.name}
+                        {isCurrentUser && <span className="ml-2 text-xs bg-neon-cyan text-black px-1 rounded">YOU</span>}
+                      </span>
+                    </div>
                   </div>
-                  <span className="font-display font-semibold text-muted-foreground">
-                    {player.score} pts
+
+                  <span className="font-display font-black text-xl text-white drop-shadow-md">
+                    {player.score} <span className="text-xs text-start opacity-70">PTS</span>
                   </span>
                 </motion.div>
               );

@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import socketService from '@/services/socketService';
-import { 
-  Play, 
-  SkipForward, 
-  Trophy, 
-  StopCircle, 
-  Users, 
+import {
+  Play,
+  SkipForward,
+  Trophy,
+  StopCircle,
+  Users,
   Zap,
   RotateCcw,
   Eye,
@@ -22,23 +22,23 @@ import {
 } from 'lucide-react';
 
 const AdminDashboard: React.FC = () => {
-  const { 
-    gameState, 
-    playerCount, 
+  const {
+    gameState,
+    playerCount,
     minorityResult,
-    startRound, 
-    nextQuestion, 
-    revealResults, 
-    showLeaderboard, 
+    startRound,
+    nextQuestion,
+    revealResults,
+    showLeaderboard,
     endRound,
-    resetGame 
+    resetGame
   } = useGame();
 
   const [isConnected, setIsConnected] = useState(socketService.isConnected());
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [loginError, setLoginError] = useState("");
-  
+
   // 👇 NEW: State for the Winning Mode
   const [winningMode, setWinningMode] = useState<'MINORITY' | 'MAJORITY'>('MINORITY');
 
@@ -105,7 +105,7 @@ const AdminDashboard: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
-        <motion.div 
+        <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-6"
@@ -113,7 +113,7 @@ const AdminDashboard: React.FC = () => {
           <div className="mx-auto w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center">
             <Lock className="w-8 h-8 text-red-500" />
           </div>
-          
+
           <div>
             <h1 className="text-2xl font-bold text-white mb-2">Admin Access</h1>
             <p className="text-gray-400 text-sm">Enter the server password to control the game.</p>
@@ -132,9 +132,9 @@ const AdminDashboard: React.FC = () => {
                 <p className="text-red-400 text-xs font-medium animate-pulse">{loginError}</p>
               )}
             </div>
-            
-            <Button 
-              type="submit" 
+
+            <Button
+              type="submit"
               className="w-full h-12 bg-red-600 hover:bg-red-500 text-white font-bold"
               disabled={!isConnected}
             >
@@ -161,7 +161,7 @@ const AdminDashboard: React.FC = () => {
         <div className="flex items-center gap-4">
           <Zap className="w-10 h-10 text-neon-cyan" />
           <div>
-            <h1 className="text-3xl font-display font-bold neon-text-cyan">Psycho Pool</h1>
+            <h1 className="text-3xl font-display font-bold neon-text-cyan">Psycho Poll</h1>
             <div className="flex items-center gap-2">
               <p className="text-muted-foreground">Admin Control Panel</p>
               <span className="flex items-center text-xs text-neon-green bg-neon-green/10 px-2 py-0.5 rounded-full border border-neon-green/20">
@@ -178,7 +178,7 @@ const AdminDashboard: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          
+
           {/* Stats Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card className="card-glow border-neon-cyan/30">
@@ -188,11 +188,11 @@ const AdminDashboard: React.FC = () => {
                 <p className="text-xs text-muted-foreground uppercase">Live Players</p>
               </CardContent>
             </Card>
-            
+
             <Card className="card-glow border-neon-green/30">
               <CardContent className="p-4 text-center">
                 <div className="w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center bg-neon-green/10">
-                   <Zap className="w-5 h-5 text-neon-green" />
+                  <Zap className="w-5 h-5 text-neon-green" />
                 </div>
                 <p className="text-xs font-display font-bold text-neon-green truncate mt-1">
                   {gameState}
@@ -209,26 +209,25 @@ const AdminDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               {/* 👇 NEW: The Chaos Mode Toggle Button */}
-              <motion.div 
+              <motion.div
                 whileTap={{ scale: 0.98 }}
                 className="mb-6"
               >
                 <Button
                   onClick={toggleMode}
-                  className={`w-full h-16 text-lg font-bold uppercase tracking-wider border-2 transition-all duration-300 ${
-                    winningMode === 'MAJORITY' 
-                      ? 'bg-red-600 hover:bg-red-700 border-red-400 text-white shadow-[0_0_20px_rgba(220,38,38,0.5)]' 
+                  className={`w-full h-16 text-lg font-bold uppercase tracking-wider border-2 transition-all duration-300 ${winningMode === 'MAJORITY'
+                      ? 'bg-red-600 hover:bg-red-700 border-red-400 text-white shadow-[0_0_20px_rgba(220,38,38,0.5)]'
                       : 'bg-green-600 hover:bg-green-700 border-green-400 text-white shadow-[0_0_20px_rgba(22,163,74,0.5)]'
-                  }`}
+                    }`}
                 >
                   {winningMode === 'MAJORITY' ? (
                     <div className="flex items-center gap-2">
-                      <Flame className="w-6 h-6 animate-pulse" /> 
+                      <Flame className="w-6 h-6 animate-pulse" />
                       🔥 Chaos Mode: MAJORITY Wins
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <Gem className="w-6 h-6" /> 
+                      <Gem className="w-6 h-6" />
                       💎 Normal Mode: MINORITY Wins
                     </div>
                   )}
@@ -288,9 +287,8 @@ const AdminDashboard: React.FC = () => {
                   <div className="flex justify-between items-center">
                     <CardTitle>Vote Distribution</CardTitle>
                     {/* 👇 Display Active Mode in Results */}
-                    <span className={`text-xs font-bold px-2 py-1 rounded ${
-                      winningMode === 'MAJORITY' ? 'bg-red-500/20 text-red-500' : 'bg-green-500/20 text-green-500'
-                    }`}>
+                    <span className={`text-xs font-bold px-2 py-1 rounded ${winningMode === 'MAJORITY' ? 'bg-red-500/20 text-red-500' : 'bg-green-500/20 text-green-500'
+                      }`}>
                       {winningMode === 'MAJORITY' ? 'Winning: MOST Votes' : 'Winning: LEAST Votes'}
                     </span>
                   </div>
@@ -300,7 +298,7 @@ const AdminDashboard: React.FC = () => {
                     {Object.entries(minorityResult.voteCounts).map(([option, count]) => {
                       const isWinner = minorityResult.winningOptions.includes(option);
                       const maxVote = Math.max(...Object.values(minorityResult.voteCounts) as number[]) || 1;
-                      
+
                       return (
                         <div key={option} className="space-y-1">
                           <div className="flex justify-between text-sm">
@@ -310,7 +308,7 @@ const AdminDashboard: React.FC = () => {
                             <span>{count as number} votes</span>
                           </div>
                           <div className="h-4 bg-muted/30 rounded-full">
-                            <div 
+                            <div
                               className={`h-full rounded-full transition-all duration-500 ${isWinner ? "bg-neon-green shadow-[0_0_10px_rgba(34,197,94,0.5)]" : "bg-neon-cyan/50"}`}
                               style={{ width: `${((count as number) / maxVote) * 100}%` }}
                             />
