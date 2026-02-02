@@ -47,11 +47,12 @@ const LeaderboardScreen: React.FC = () => {
         <motion.div
           key={i}
           className="particle"
-          initial={{ opacity: 0, y: -20, x: Math.random() * window.innerWidth }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{
             opacity: [0, 1, 0],
             y: ['0vh', '100vh'],
-            rotate: Math.random() * 360
+            rotate: Math.random() * 360,
+            x: [0, Math.random() * 40 - 20, 0] // Gentle sway instead of massive offset
           }}
           transition={{
             duration: 2 + Math.random() * 3,
@@ -59,6 +60,7 @@ const LeaderboardScreen: React.FC = () => {
             delay: Math.random() * 5
           }}
           style={{
+            zIndex: 20, // Bring to front
             left: `${Math.random() * 100}%`,
             background: i % 3 === 0 ? 'var(--arcade-neon-pink)' : i % 3 === 1 ? 'var(--arcade-neon-cyan)' : 'var(--arcade-neon-yellow)'
           }}
@@ -70,7 +72,7 @@ const LeaderboardScreen: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          className="text-center mb-8 mt-12"
         >
           <div className="inline-flex items-center gap-3 mb-2">
             <Trophy className="w-10 h-10 text-neon-yellow animate-bounce" style={{ filter: 'drop-shadow(0 0 10px hsl(var(--neon-yellow)))' }} />
