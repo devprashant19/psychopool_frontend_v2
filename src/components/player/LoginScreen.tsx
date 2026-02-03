@@ -43,7 +43,7 @@ const LoginScreen: React.FC = () => {
               <Zap className="w-16 h-16 text-neon-cyan animate-pulse-fast" style={{ filter: 'drop-shadow(0 0 10px hsl(var(--neon-cyan)))' }} />
             </motion.div>
             <h1 className="text-5xl font-display font-bold neon-text-cyan">
-              Psycho Poll
+              Psycho Pool
             </h1>
 
           </div>

@@ -161,7 +161,7 @@ const AdminDashboard: React.FC = () => {
         <div className="flex items-center gap-4">
           <Zap className="w-10 h-10 text-neon-cyan" />
           <div>
-            <h1 className="text-3xl font-display font-bold neon-text-cyan">Psycho Poll</h1>
+            <h1 className="text-3xl font-display font-bold neon-text-cyan">Psycho Pool</h1>
             <div className="flex items-center gap-2">
               <p className="text-muted-foreground">Admin Control Panel</p>
               <span className="flex items-center text-xs text-neon-green bg-neon-green/10 px-2 py-0.5 rounded-full border border-neon-green/20">
@@ -216,8 +216,8 @@ const AdminDashboard: React.FC = () => {
                 <Button
                   onClick={toggleMode}
                   className={`w-full h-16 text-lg font-bold uppercase tracking-wider border-2 transition-all duration-300 ${winningMode === 'MAJORITY'
-                      ? 'bg-red-600 hover:bg-red-700 border-red-400 text-white shadow-[0_0_20px_rgba(220,38,38,0.5)]'
-                      : 'bg-green-600 hover:bg-green-700 border-green-400 text-white shadow-[0_0_20px_rgba(22,163,74,0.5)]'
+                    ? 'bg-red-600 hover:bg-red-700 border-red-400 text-white shadow-[0_0_20px_rgba(220,38,38,0.5)]'
+                    : 'bg-green-600 hover:bg-green-700 border-green-400 text-white shadow-[0_0_20px_rgba(22,163,74,0.5)]'
                     }`}
                 >
                   {winningMode === 'MAJORITY' ? (
