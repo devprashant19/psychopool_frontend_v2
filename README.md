@@ -25,6 +25,7 @@
 ## 🛠️ Tech Stack
 
 - **Frontend Framework**: [React 18](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **Hosting**: [Vercel](https://vercel.com/) (Frontend), [Google Cloud](https://cloud.google.com/) (Backend)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [Shadcn UI](https://ui.shadcn.com/)
 - **Animations**: [Framer Motion](https://www.framer.com/motion/)
 - **Real-time Communication**: [Socket.io Client](https://socket.io/)
