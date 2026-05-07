@@ -46,7 +46,7 @@ export const useGame = (): GameContextType => {
 export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [gameState, setGameState] = useState<GameState>("DISCONNECTED");
   const [currentRound, setCurrentRound] = useState(0);
-  const [totalRounds] = useState(5);
+  const [totalRounds] = useState(10);
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [playerCount, setPlayerCount] = useState(0);

@@ -12,18 +12,18 @@ const optionColors = [
 ];
 
 const QuestionScreen: React.FC = () => {
-  // 1. Get submitAnswer from Context (it holds your real Player ID)
+
   const { currentQuestion, submitAnswer } = useGame();
 
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [isLocked, setIsLocked] = useState(false);
-  const [serverResult, setServerResult] = useState<{ correct: boolean; correctAnswer: number } | null>(null);
+  const [serverResult, setServerResult] = useState<{ correct: boolean; winningOptions: string[] } | null>(null);
   const [timeLeft, setTimeLeft] = useState(currentQuestion?.timeLimit || 15);
 
   useEffect(() => {
     if (!currentQuestion) return;
 
-    // Reset state for new question
+
     setSelectedIdx(null);
     setIsLocked(false);
     setServerResult(null);
@@ -33,9 +33,9 @@ const QuestionScreen: React.FC = () => {
       setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
-    // Listen for the result from server
+
     const handleResult = (data: any) => {
-      setServerResult({ correct: data.isCorrect, correctAnswer: data.correctAnswer });
+      setServerResult({ correct: data.isCorrect, winningOptions: data.winningOptions || [] });
     };
 
     socketService.on("answer_result", handleResult);
@@ -52,14 +52,14 @@ const QuestionScreen: React.FC = () => {
     setSelectedIdx(index);
     setIsLocked(true);
 
-    // 2. USE THE CONTEXT FUNCTION (This uses your Real ID)
+
     submitAnswer(optionText);
   };
 
   if (!currentQuestion) return <div>Loading Question...</div>;
 
   const progressPercent = (timeLeft / currentQuestion.timeLimit) * 100;
-  // Calculate segments for arcade look (e.g., 20 segments)
+
   const segments = 20;
   const activeSegments = Math.ceil((timeLeft / currentQuestion.timeLimit) * segments);
 
@@ -69,7 +69,7 @@ const QuestionScreen: React.FC = () => {
       <div className="absolute inset-0 bg-grid opacity-50" />
 
       <div className="relative z-10 flex flex-col h-full">
-        {/* Timer bar */}
+
         <div className="mb-6">
           <div className="flex justify-between items-end mb-1">
             <span className="text-neon-yellow font-display text-sm tracking-widest uppercase">Time Left</span>
@@ -95,7 +95,7 @@ const QuestionScreen: React.FC = () => {
           </div>
         </div>
 
-        {/* Question text */}
+
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -108,20 +108,20 @@ const QuestionScreen: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Answer options */}
+
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 auto-rows-fr">
           {currentQuestion.options.map((option, index) => {
             const color = optionColors[index % 4];
 
             const isSelected = selectedIdx === index;
-            // Only reveal answer if we have the server result
-            const isCorrect = serverResult?.correctAnswer === index;
+
+            const isCorrect = serverResult?.winningOptions.includes(option);
             const showResult = serverResult !== null;
 
             let buttonStyle = `border-border bg-card/50 hover:${color.border} hover:${color.bg}`;
 
             if (isSelected) {
-              // Selected but waiting
+
               buttonStyle = `${color.border} ${color.bg} ${color.shadow}`;
             }
 
@@ -168,7 +168,7 @@ const QuestionScreen: React.FC = () => {
           })}
         </div>
 
-        {/* Status Footer */}
+
         {isLocked && !serverResult && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 text-center flex items-center justify-center gap-2 text-muted-foreground">
             <Loader2 className="w-4 h-4 animate-spin" />
