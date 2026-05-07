@@ -36,6 +36,7 @@ interface ServerToClientEvents {
   connect: () => void;
   disconnect: () => void;
   join_success: (data: { playerId: string }) => void;
+  join_fail: (data: { message: string }) => void;
   player_count_update: (count: number) => void;
   round_start: (data: { round: number }) => void;
   new_question: (data: Question) => void;
@@ -112,8 +113,7 @@ class SocketService {
     });
 
     this.pendingListeners.forEach(({ event, callback }) => {
-      // @ts-ignore
-      this.socket?.on(event, callback);
+      this.socket?.on(event as any, callback);
     });
     this.pendingListeners = [];
 
@@ -150,8 +150,7 @@ class SocketService {
     callback: ServerToClientEvents[T]
   ): void {
     if (this.socket) {
-      // @ts-ignore
-      this.socket.on(event, callback);
+      this.socket.on(event as any, callback);
     } else {
       console.log(`⏳ Queueing listener for: ${event}`);
       this.pendingListeners.push({ event, callback });
