@@ -11,7 +11,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 export interface MinorityResultData {
   voteCounts: Record<string, number>;
   winningOptions: string[];
-  mode?: 'MINORITY' | 'MAJORITY'; // Added mode to interface
+  mode?: 'MINORITY' | 'MAJORITY';
 }
 
 interface GameContextType {
@@ -54,7 +54,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [minorityResult, setMinorityResult] = useState<MinorityResultData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // --- 1. INITIALIZE CONNECTION (NEW) ---
+
   useEffect(() => {
     console.log("🔌 Connecting to backend:", BACKEND_URL);
     socketService.connect(BACKEND_URL);
@@ -64,7 +64,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, []);
 
-  // --- 2. SETUP LISTENERS ---
+
   useEffect(() => {
     const savedPlayerId = localStorage.getItem("my_player_id");
 
@@ -86,7 +86,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setMyPlayerId(data.playerId);
       setError(null);
       setGameState("LOBBY"); 
-      // SAVE ID WHEN JOINING
       localStorage.setItem("my_player_id", data.playerId);
     });
 
@@ -123,7 +122,6 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setMyPlayerId(null);
       setCurrentQuestion(null);
       setMinorityResult(null);
-      // CLEAR ID ON RESET
       localStorage.removeItem("my_player_id");
       window.location.reload();
     });
@@ -144,7 +142,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       else setMinorityResult(null);
     });
 
-    // --- HANDLE PLAYER RECONNECT SUCCESS ---
+
     socketService.on("player_reconnect_success", (data) => {
       console.log("✅ Reconnect Successful!", data);
       
@@ -162,11 +160,11 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       else setMinorityResult(null);
     });
 
-    // --- HANDLE PLAYER RECONNECT FAILURE ---
+
     socketService.on("player_reconnect_fail", () => {
       console.log("❌ Reconnect Failed (Invalid ID or Server Restarted)");
-      localStorage.removeItem("my_player_id"); // Clear bad ID
-      setGameState("DISCONNECTED"); // Send to Login
+      localStorage.removeItem("my_player_id");
+      setGameState("DISCONNECTED");
     });
 
     return () => {
@@ -187,7 +185,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, []);
 
-  // --- ACTIONS ---
+
 
   const joinGame = (nickname: string) => {
     setError(null);

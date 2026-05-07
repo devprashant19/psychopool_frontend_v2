@@ -1,6 +1,6 @@
 import { io, Socket } from "socket.io-client";
 
-// --- 1. GAME STATE ---
+
 export type GameState = 
   | 'DISCONNECTED' 
   | 'LOBBY' 
@@ -12,7 +12,7 @@ export type GameState =
 
 export type WinningMode = 'MINORITY' | 'MAJORITY';
 
-// --- 2. DATA TYPES ---
+
 export interface QuestionData {
   id: string;
   text: string;
@@ -31,7 +31,7 @@ export interface LeaderboardEntry {
 }
 export type Player = LeaderboardEntry;
 
-// --- 3. SOCKET EVENT INTERFACES ---
+
 interface ServerToClientEvents {
   connect: () => void;
   disconnect: () => void;
@@ -94,7 +94,7 @@ interface ClientToServerEvents {
   player_reconnect: (playerId: string) => void;
 }
 
-// --- 4. THE SERVICE CLASS ---
+
 class SocketService {
   public socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null;
   private pendingListeners: Array<{ event: string, callback: any }> = [];
@@ -102,9 +102,9 @@ class SocketService {
   connect(url: string): void {
     if (this.socket) return;
     
-    // 👇 FIXED: Added Polling + Reconnection Logic
+
     this.socket = io(url, {
-      transports: ["polling", "websocket"], // Vital for Cloud Run
+      transports: ["polling", "websocket"], 
       withCredentials: true,
       autoConnect: true,
       reconnection: true,
