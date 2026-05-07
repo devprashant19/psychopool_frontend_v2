@@ -7,7 +7,7 @@ import { Zap } from 'lucide-react';
 
 const LoginScreen: React.FC = () => {
   const [nickname, setNickname] = useState('');
-  const { joinGame } = useGame();
+  const { joinGame, error } = useGame();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +60,15 @@ const LoginScreen: React.FC = () => {
           onSubmit={handleSubmit}
           className="space-y-6"
         >
+          {error && (
+            <motion.p
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-neon-magenta text-center font-bold animate-pulse"
+            >
+              ⚠️ {error}
+            </motion.p>
+          )}
           <div className="relative box-arcade p-2">
             <Input
               type="text"

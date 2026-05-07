@@ -23,6 +23,7 @@ interface GameContextType {
   playerCount: number;
   myPlayerId: string | null;
   minorityResult: MinorityResultData | null;
+  error: string | null;
 
   joinGame: (nickname: string) => void;
   submitAnswer: (answer: string) => void; 
@@ -51,6 +52,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [playerCount, setPlayerCount] = useState(0);
   const [myPlayerId, setMyPlayerId] = useState<string | null>(null);
   const [minorityResult, setMinorityResult] = useState<MinorityResultData | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // --- 1. INITIALIZE CONNECTION (NEW) ---
   useEffect(() => {
@@ -82,9 +84,15 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     socketService.on("join_success", (data) => {
       setMyPlayerId(data.playerId);
+      setError(null);
       setGameState("LOBBY"); 
       // SAVE ID WHEN JOINING
       localStorage.setItem("my_player_id", data.playerId);
+    });
+
+    socketService.on("join_fail", (data) => {
+      setError(data.message);
+      setGameState("DISCONNECTED");
     });
 
     socketService.on("player_count_update", (count) => setPlayerCount(count));
@@ -165,6 +173,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       socketService.off("connect");
       socketService.off("disconnect");
       socketService.off("join_success");
+      socketService.off("join_fail");
       socketService.off("player_count_update");
       socketService.off("round_start");
       socketService.off("new_question");
@@ -181,8 +190,8 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // --- ACTIONS ---
 
   const joinGame = (nickname: string) => {
+    setError(null);
     socketService.emit("join_game", { name: nickname });
-    setGameState("LOBBY"); 
   };
 
   const submitAnswer = (answer: string) => {
@@ -217,6 +226,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       playerCount,
       myPlayerId,
       minorityResult, 
+      error,
       joinGame,
       submitAnswer,
       startRound,
