@@ -216,8 +216,8 @@ const AdminDashboard: React.FC = () => {
                 <Button
                   onClick={toggleMode}
                   className={`w-full h-16 text-lg font-bold uppercase tracking-wider border-2 transition-all duration-300 ${winningMode === 'MAJORITY'
-                    ? 'bg-red-600 hover:bg-red-700 border-red-400 text-white shadow-[0_0_20px_rgba(220,38,38,0.5)]'
-                    : 'bg-green-600 hover:bg-green-700 border-green-400 text-white shadow-[0_0_20px_rgba(22,163,74,0.5)]'
+                    ? 'bg-green-600 hover:bg-green-700 border-green-400 text-white shadow-[0_0_20px_rgba(22,163,74,0.5)]'
+                    : 'bg-red-600 hover:bg-red-700 border-red-400 text-white shadow-[0_0_20px_rgba(220,38,38,0.5)]'
                     }`}
                 >
                   {winningMode === 'MAJORITY' ? (
@@ -287,7 +287,7 @@ const AdminDashboard: React.FC = () => {
                   <div className="flex justify-between items-center">
                     <CardTitle>Vote Distribution</CardTitle>
                     {/* 👇 Display Active Mode in Results */}
-                    <span className={`text-xs font-bold px-2 py-1 rounded ${winningMode === 'MAJORITY' ? 'bg-red-500/20 text-red-500' : 'bg-green-500/20 text-green-500'
+                    <span className={`text-xs font-bold px-2 py-1 rounded ${winningMode === 'MAJORITY' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'
                       }`}>
                       {winningMode === 'MAJORITY' ? 'Winning: MOST Votes' : 'Winning: LEAST Votes'}
                     </span>
