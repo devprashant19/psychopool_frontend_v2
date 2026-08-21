@@ -26,9 +26,9 @@ const LeaderboardScreen: React.FC = () => {
   };
 
   const rankColors = [
-    'text-theme-gray neon-text-yellow',
-    'text-gray-300',
-    'text-amber-600',
+    'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]', // Gold
+    'text-gray-300 drop-shadow-[0_0_8px_rgba(209,213,219,0.8)]', // Silver
+    'text-amber-600 drop-shadow-[0_0_8px_rgba(217,119,6,0.8)]',  // Bronze
   ];
 
   return (
@@ -53,8 +53,8 @@ const LeaderboardScreen: React.FC = () => {
           className="text-center mb-8 mt-12"
         >
           <div className="inline-flex items-center gap-3 mb-2">
-            <Trophy className="w-10 h-10 text-theme-gray animate-bounce" style={{ filter: 'drop-shadow(0 0 10px hsl(var(--theme-gray)))' }} />
-            <h1 className="text-3xl font-display font-bold text-theme-gray text-glow-white uppercase tracking-widest">
+            <Trophy className="w-10 h-10 text-yellow-400 animate-bounce drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" />
+            <h1 className="text-3xl font-display font-bold text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)] uppercase tracking-widest">
               {gameState === 'GAME_OVER' ? 'GAME OVER' : 'TOP RANK'}
             </h1>
           </div>
@@ -111,10 +111,12 @@ const LeaderboardScreen: React.FC = () => {
                   transition={{ delay: delays[podiumIndex] + 0.3, duration: 0.4 }}
                   className={`w-16 md:w-32 ${heights[podiumIndex]} 
                     ${podiumIndex === 0
-                      ? 'bg-gradient-to-b from-theme-gray to-yellow-900 border-x-4 border-t-4 border-white animate-shine shadow-[0_0_50px_rgba(255,255,0,0.5)]'
-                      : 'bg-gradient-to-b from-gray-400 to-gray-900 border-x-2 border-t-2 border-gray-400'
+                      ? 'bg-gradient-to-b from-yellow-400 to-yellow-700 border-x-4 border-t-4 border-yellow-200 animate-shine shadow-[0_0_50px_rgba(250,204,21,0.6)]'
+                      : podiumIndex === 1
+                      ? 'bg-gradient-to-b from-gray-300 to-gray-600 border-x-2 border-t-2 border-gray-100 shadow-[0_0_30px_rgba(209,213,219,0.4)]'
+                      : 'bg-gradient-to-b from-amber-600 to-amber-900 border-x-2 border-t-2 border-amber-400 shadow-[0_0_30px_rgba(217,119,6,0.4)]'
                     }
-                    shadow-[0_0_30px_rgba(0,0,0,0.8)] relative overflow-hidden`}
+                    relative overflow-hidden`}
                 >
                   {/* Podium Shine Effect */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent transform translate-y-full animate-[shimmer_2s_infinite]" />
