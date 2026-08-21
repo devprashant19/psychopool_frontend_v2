@@ -159,12 +159,12 @@ const AdminDashboard: React.FC = () => {
       {/* Header */}
       <motion.div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Zap className="w-10 h-10 text-neon-cyan" />
+          <Zap className="w-10 h-10 text-theme-red" />
           <div>
             <h1 className="text-3xl font-display font-bold neon-text-cyan">Psycho Pool</h1>
             <div className="flex items-center gap-2">
               <p className="text-muted-foreground">Admin Control Panel</p>
-              <span className="flex items-center text-xs text-neon-green bg-neon-green/10 px-2 py-0.5 rounded-full border border-neon-green/20">
+              <span className="flex items-center text-xs text-theme-success bg-theme-success/10 px-2 py-0.5 rounded-full border border-theme-success/20">
                 <Wifi className="w-3 h-3 mr-1" /> Online & Authenticated
               </span>
             </div>
@@ -181,20 +181,20 @@ const AdminDashboard: React.FC = () => {
 
           {/* Stats Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card className="card-glow border-neon-cyan/30">
+            <Card className="card-glow border-theme-red/30">
               <CardContent className="p-4 text-center">
-                <Users className="w-8 h-8 text-neon-cyan mx-auto mb-2" />
-                <p className="text-3xl font-display font-bold text-neon-cyan">{playerCount}</p>
+                <Users className="w-8 h-8 text-theme-red mx-auto mb-2" />
+                <p className="text-3xl font-display font-bold text-theme-red">{playerCount}</p>
                 <p className="text-xs text-muted-foreground uppercase">Live Players</p>
               </CardContent>
             </Card>
 
-            <Card className="card-glow border-neon-green/30">
+            <Card className="card-glow border-theme-success/30">
               <CardContent className="p-4 text-center">
-                <div className="w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center bg-neon-green/10">
-                  <Zap className="w-5 h-5 text-neon-green" />
+                <div className="w-8 h-8 rounded-full mx-auto mb-2 flex items-center justify-center bg-theme-success/10">
+                  <Zap className="w-5 h-5 text-theme-success" />
                 </div>
-                <p className="text-xs font-display font-bold text-neon-green truncate mt-1">
+                <p className="text-xs font-display font-bold text-theme-success truncate mt-1">
                   {gameState}
                 </p>
                 <p className="text-xs text-muted-foreground uppercase">Status</p>
@@ -282,7 +282,7 @@ const AdminDashboard: React.FC = () => {
           {/* RESULTS PANEL */}
           {minorityResult && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <Card className="card-glow border-neon-cyan/20">
+              <Card className="card-glow border-theme-red/20">
                 <CardHeader>
                   <div className="flex justify-between items-center">
                     <CardTitle>Vote Distribution</CardTitle>
@@ -302,14 +302,14 @@ const AdminDashboard: React.FC = () => {
                       return (
                         <div key={option} className="space-y-1">
                           <div className="flex justify-between text-sm">
-                            <span className={isWinner ? "text-neon-green font-bold" : "text-muted-foreground"}>
+                            <span className={isWinner ? "text-theme-success font-bold" : "text-muted-foreground"}>
                               {option} {isWinner && "(WINNER)"}
                             </span>
                             <span>{count as number} votes</span>
                           </div>
                           <div className="h-4 bg-muted/30 rounded-full">
                             <div
-                              className={`h-full rounded-full transition-all duration-500 ${isWinner ? "bg-neon-green shadow-[0_0_10px_rgba(34,197,94,0.5)]" : "bg-neon-cyan/50"}`}
+                              className={`h-full rounded-full transition-all duration-500 ${isWinner ? "bg-theme-success shadow-[0_0_10px_rgba(34,197,94,0.5)]" : "bg-theme-red/50"}`}
                               style={{ width: `${((count as number) / maxVote) * 100}%` }}
                             />
                           </div>

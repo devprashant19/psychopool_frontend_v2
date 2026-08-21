@@ -26,7 +26,7 @@ const LeaderboardScreen: React.FC = () => {
   };
 
   const rankColors = [
-    'text-neon-yellow neon-text-yellow',
+    'text-theme-gray neon-text-yellow',
     'text-gray-300',
     'text-amber-600',
   ];
@@ -39,7 +39,7 @@ const LeaderboardScreen: React.FC = () => {
       <motion.div
         animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }}
         transition={{ duration: 4, repeat: Infinity }}
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-neon-cyan/5 rounded-full blur-3xl"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-theme-red/5 rounded-full blur-3xl"
       />
 
       {/* Dynamic Confetti (Simple CSS Particles) */}
@@ -53,8 +53,8 @@ const LeaderboardScreen: React.FC = () => {
           className="text-center mb-8 mt-12"
         >
           <div className="inline-flex items-center gap-3 mb-2">
-            <Trophy className="w-10 h-10 text-neon-yellow animate-bounce" style={{ filter: 'drop-shadow(0 0 10px hsl(var(--neon-yellow)))' }} />
-            <h1 className="text-3xl font-display font-bold text-neon-yellow text-glow-pink uppercase tracking-widest">
+            <Trophy className="w-10 h-10 text-theme-gray animate-bounce" style={{ filter: 'drop-shadow(0 0 10px hsl(var(--theme-gray)))' }} />
+            <h1 className="text-3xl font-display font-bold text-theme-gray text-glow-white uppercase tracking-widest">
               {gameState === 'GAME_OVER' ? 'GAME OVER' : 'TOP RANK'}
             </h1>
           </div>
@@ -96,7 +96,7 @@ const LeaderboardScreen: React.FC = () => {
                     {getRankIcon(player.rank || podiumIndex + 1)}
                   </span>
 
-                  <p className={`font-display font-bold text-sm mt-1 ${isCurrentUser ? 'text-neon-cyan' : 'text-foreground'}`}>
+                  <p className={`font-display font-bold text-sm mt-1 ${isCurrentUser ? 'text-theme-red' : 'text-foreground'}`}>
                     {player.name}
                   </p>
                   <p className="text-muted-foreground text-xs font-display">
@@ -111,7 +111,7 @@ const LeaderboardScreen: React.FC = () => {
                   transition={{ delay: delays[podiumIndex] + 0.3, duration: 0.4 }}
                   className={`w-16 md:w-32 ${heights[podiumIndex]} 
                     ${podiumIndex === 0
-                      ? 'bg-gradient-to-b from-neon-yellow to-yellow-900 border-x-4 border-t-4 border-white animate-shine shadow-[0_0_50px_rgba(255,255,0,0.5)]'
+                      ? 'bg-gradient-to-b from-theme-gray to-yellow-900 border-x-4 border-t-4 border-white animate-shine shadow-[0_0_50px_rgba(255,255,0,0.5)]'
                       : 'bg-gradient-to-b from-gray-400 to-gray-900 border-x-2 border-t-2 border-gray-400'
                     }
                     shadow-[0_0_30px_rgba(0,0,0,0.8)] relative overflow-hidden`}
@@ -138,18 +138,18 @@ const LeaderboardScreen: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.6 }}
-            className="mb-6 mx-4 p-4 rounded-xl bg-neon-cyan/10 border border-neon-cyan/30 neon-border-cyan"
+            className="mb-6 mx-4 p-4 rounded-xl bg-theme-red/10 border border-theme-red/30 neon-border-cyan"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full bg-gradient-to-br from-neon-cyan to-blue-600 text-white flex items-center justify-center font-display font-bold shadow-lg">
+                <span className="w-8 h-8 rounded-full bg-gradient-to-br from-theme-red to-blue-600 text-white flex items-center justify-center font-display font-bold shadow-lg">
                   {myRank}
                 </span>
-                <span className="font-semibold text-neon-cyan">
+                <span className="font-semibold text-theme-red">
                   {currentPlayer?.name} (You)
                 </span>
               </div>
-              <span className="font-display font-bold text-neon-cyan">
+              <span className="font-display font-bold text-theme-red">
                 {currentPlayer?.score} pts
               </span>
             </div>
@@ -169,7 +169,7 @@ const LeaderboardScreen: React.FC = () => {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ delay: 0.5 + index * 0.1 }}
                   className={`flex items-center justify-between p-4 rounded-xl glass-card border-l-4 ${isCurrentUser
-                    ? 'border-l-neon-cyan bg-neon-cyan/10'
+                    ? 'border-l-theme-red bg-theme-red/10'
                     : 'border-l-transparent'
                     }`}
                 >
@@ -180,9 +180,9 @@ const LeaderboardScreen: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col">
-                      <span className={`font-bold text-lg tracking-wide ${isCurrentUser ? 'text-neon-cyan text-glow-cyan' : 'text-white'}`}>
+                      <span className={`font-bold text-lg tracking-wide ${isCurrentUser ? 'text-theme-red text-glow-red' : 'text-white'}`}>
                         {player.name}
-                        {isCurrentUser && <span className="ml-2 text-xs bg-neon-cyan text-black px-1 rounded">YOU</span>}
+                        {isCurrentUser && <span className="ml-2 text-xs bg-theme-red text-black px-1 rounded">YOU</span>}
                       </span>
                     </div>
                   </div>

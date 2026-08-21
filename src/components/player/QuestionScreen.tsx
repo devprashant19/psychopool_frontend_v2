@@ -5,10 +5,10 @@ import { Check, X, Loader2 } from 'lucide-react';
 import socketService from '@/services/socketService';
 
 const optionColors = [
-  { bg: 'bg-neon-red/20', border: 'border-neon-red', text: 'text-neon-red', shadow: 'shadow-[0_0_20px_hsl(var(--neon-red)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--neon-red))]' },
-  { bg: 'bg-neon-cyan/20', border: 'border-neon-cyan', text: 'text-neon-cyan', shadow: 'shadow-[0_0_20px_hsl(var(--neon-cyan)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--neon-cyan))]' },
-  { bg: 'bg-neon-yellow/20', border: 'border-neon-yellow', text: 'text-neon-yellow', shadow: 'shadow-[0_0_20px_hsl(var(--neon-yellow)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--neon-yellow))]' },
-  { bg: 'bg-neon-green/20', border: 'border-neon-green', text: 'text-neon-green', shadow: 'shadow-[0_0_20px_hsl(var(--neon-green)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--neon-green))]' },
+  { bg: 'bg-theme-red/20', border: 'border-theme-red', text: 'text-theme-red', shadow: 'shadow-[0_0_20px_hsl(var(--theme-red)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--theme-red))]' },
+  { bg: 'bg-theme-red/20', border: 'border-theme-red', text: 'text-theme-red', shadow: 'shadow-[0_0_20px_hsl(var(--theme-red)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--theme-red))]' },
+  { bg: 'bg-theme-gray/20', border: 'border-theme-gray', text: 'text-theme-gray', shadow: 'shadow-[0_0_20px_hsl(var(--theme-gray)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--theme-gray))]' },
+  { bg: 'bg-theme-success/20', border: 'border-theme-success', text: 'text-theme-success', shadow: 'shadow-[0_0_20px_hsl(var(--theme-success)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--theme-success))]' },
 ];
 
 const QuestionScreen: React.FC = () => {
@@ -72,15 +72,15 @@ const QuestionScreen: React.FC = () => {
 
         <div className="mb-6">
           <div className="flex justify-between items-end mb-1">
-            <span className="text-neon-yellow font-display text-sm tracking-widest uppercase">Time Left</span>
-            <span className="text-neon-yellow font-display text-xl animate-pulse">{timeLeft}s</span>
+            <span className="text-theme-gray font-display text-sm tracking-widest uppercase">Time Left</span>
+            <span className="text-theme-gray font-display text-xl animate-pulse">{timeLeft}s</span>
           </div>
           <div className="h-6 flex gap-1">
             {[...Array(segments)].map((_, i) => (
               <div
                 key={i}
                 className={`flex-1 transition-colors duration-200 skew-x-[-12deg] border border-black/20 ${i < activeSegments
-                    ? (timeLeft <= 5 ? 'bg-neon-red animate-pulse-fast' : 'bg-gradient-to-r from-neon-cyan to-blue-500')
+                    ? (timeLeft <= 5 ? 'bg-theme-red animate-pulse-fast' : 'bg-gradient-to-r from-theme-red to-blue-500')
                     : 'bg-gray-800/30'
                   }`}
                 style={{
@@ -101,8 +101,8 @@ const QuestionScreen: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="flex-shrink-0 mb-6"
         >
-          <div className="bg-black/60 backdrop-blur-md rounded-none p-6 box-arcade">
-            <h1 className="text-lg md:text-xl font-bold text-center text-white leading-relaxed font-display tracking-wide uppercase text-glow-cyan">
+          <div className="bg-black/60 backdrop-blur-md rounded-none p-6 box-theme">
+            <h1 className="text-lg md:text-xl font-bold text-center text-white leading-relaxed font-display tracking-wide uppercase text-glow-red">
               {currentQuestion.text}
             </h1>
           </div>
@@ -126,8 +126,8 @@ const QuestionScreen: React.FC = () => {
             }
 
             if (showResult) {
-              if (isCorrect) buttonStyle = 'border-neon-green bg-neon-green/20 shadow-[0_0_25px_hsl(var(--neon-green)/0.6)]';
-              else if (isSelected && !serverResult.correct) buttonStyle = 'border-neon-red bg-neon-red/20 shadow-[0_0_25px_hsl(var(--neon-red)/0.6)]';
+              if (isCorrect) buttonStyle = 'border-theme-success bg-theme-success/20 shadow-[0_0_25px_hsl(var(--theme-success)/0.6)]';
+              else if (isSelected && !serverResult.correct) buttonStyle = 'border-theme-red bg-theme-red/20 shadow-[0_0_25px_hsl(var(--theme-red)/0.6)]';
               else buttonStyle = 'opacity-50 border-border';
             }
 

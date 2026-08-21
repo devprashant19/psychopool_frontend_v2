@@ -22,13 +22,13 @@ const LobbyScreen: React.FC = () => {
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-0 rounded-md border-t-4 border-neon-cyan opacity-50"
+            className="absolute inset-0 rounded-md border-t-4 border-theme-red opacity-50"
           />
           {/* Inner Ring */}
           <motion.div
             animate={{ rotate: -360 }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-4 rounded-md border-b-4 border-neon-magenta opacity-50"
+            className="absolute inset-4 rounded-md border-b-4 border-theme-white opacity-50"
           />
           {/* Icon */}
           <Loader2 className="w-10 h-10 text-white animate-spin-slow" />
@@ -38,7 +38,7 @@ const LobbyScreen: React.FC = () => {
           <h2 className="text-3xl font-bold font-display tracking-wider text-white">
             YOU'RE IN!
           </h2>
-          <p className="text-neon-cyan animate-glitch font-bold uppercase tracking-widest">
+          <p className="text-theme-red animate-glitch font-bold uppercase tracking-widest">
             WAITING FOR CHALLENGERS...
           </p>
         </div>
@@ -49,10 +49,10 @@ const LobbyScreen: React.FC = () => {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="mt-8 flex items-center gap-2 px-6 py-3 bg-black/50 border-2 border-neon-yellow shadow-[0_0_15px_rgba(255,255,0,0.3)] backdrop-blur-md skew-x-[-10deg]"
+        className="mt-8 flex items-center gap-2 px-6 py-3 bg-black/50 border-2 border-theme-gray shadow-[0_0_15px_rgba(255,255,0,0.3)] backdrop-blur-md skew-x-[-10deg]"
       >
-        <Users className="w-4 h-4 text-neon-yellow" />
-        <span className="font-bold text-neon-yellow">{playerCount}</span>
+        <Users className="w-4 h-4 text-theme-gray" />
+        <span className="font-bold text-theme-gray">{playerCount}</span>
         <span className="text-sm text-gray-400">Players Waiting</span>
       </motion.div>
 
@@ -66,13 +66,13 @@ const LobbyScreen: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="bg-black/40 border-b-2 border-r-2 border-neon-green/50 backdrop-blur-sm rounded-none">
+            <Card className="bg-black/40 border-b-2 border-r-2 border-theme-success/50 backdrop-blur-sm rounded-none">
               <CardContent className="p-3 flex items-center justify-center text-center">
-                <span className="font-bold text-sm truncate text-neon-green font-display uppercase tracking-wider">
+                <span className="font-bold text-sm truncate text-theme-success font-display uppercase tracking-wider">
                   {player.name}
                 </span>
                 {/* Ready Indicator */}
-                <div className="w-2 h-2 ml-2 bg-neon-green rounded-full animate-ping" />
+                <div className="w-2 h-2 ml-2 bg-theme-success rounded-full animate-ping" />
               </CardContent>
             </Card>
           </motion.div>

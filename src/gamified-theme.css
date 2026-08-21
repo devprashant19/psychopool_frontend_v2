@@ -2,33 +2,34 @@
 
 .gamified-theme {
   /* Override Global Variables ONLY within this scope */
-  --background: 260 50% 5%;
-  /* Darker Deep Purple for contrast */
+  --background: 0 0% 5%;
+  /* Deep Black for contrast */
   --foreground: 0 0% 100%;
 
-  --card: 260 50% 10%;
+  --card: 0 0% 8%;
   --card-foreground: 0 0% 100%;
 
-  --muted: 260 30% 20%;
-  --muted-foreground: 260 20% 70%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 70%;
 
-  --border: 280 60% 30%;
+  --border: 0 0% 20%;
 
-  --radius: 4px;
-  /* Slight rounded for modern feel, not fully sharp */
+  --radius: 0px;
+  /* Sharp edges for sleek look */
 
   /* Theme Specific Colors */
-  --arcade-neon-pink: #ff00ff;
-  --arcade-neon-cyan: #00ffff;
-  --arcade-neon-yellow: #ffff00;
-  --arcade-neon-green: #00ff00;
-  --arcade-neon-purple: #bd00ff;
+  --theme-accent-red: #ff1a1a;
+  --theme-main-red: #e50914;
+  --theme-white: #ffffff;
+  --theme-success: #00ff41; /* Keep a green for correct states if needed, but mostly use white/red */
+  --theme-dark-red: #8b0000;
+  --theme-gray: #444444;
 
   /* Rich Gradients */
-  --grad-cyber-1: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
-  --grad-cyber-2: linear-gradient(to bottom, #2a0a3b, #000000);
+  --grad-cyber-1: linear-gradient(135deg, #e50914 0%, #ff1a1a 100%);
+  --grad-cyber-2: linear-gradient(to bottom, #1a0000, #000000);
   --grad-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-  --grad-glow-orb: radial-gradient(circle at center, rgba(189, 0, 255, 0.2) 0%, transparent 70%);
+  --grad-glow-orb: radial-gradient(circle at center, rgba(229, 9, 20, 0.2) 0%, transparent 70%);
 
   font-family: 'Rajdhani', sans-serif;
 
@@ -55,13 +56,13 @@
 .gamified-theme .bg-grid {
   background-size: 40px 40px;
   background-image:
-    linear-gradient(to right, rgba(255, 0, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(229, 9, 20, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(229, 9, 20, 0.05) 1px, transparent 1px);
   animation: scrollGrid 20s linear infinite;
 }
 
 .gamified-theme .bg-grid-fade {
-  background: radial-gradient(circle at 50% 30%, rgba(30, 30, 60, 0) 0%, #090310 90%);
+  background: radial-gradient(circle at 50% 30%, rgba(20, 0, 0, 0) 0%, #050000 90%);
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -78,53 +79,53 @@
 }
 
 /* Utilities */
-.gamified-theme .text-glow-pink {
-  text-shadow: 0 0 5px var(--arcade-neon-pink), 0 0 15px var(--arcade-neon-pink);
+.gamified-theme .text-glow-red {
+  text-shadow: 0 0 5px var(--theme-main-red), 0 0 15px var(--theme-main-red);
 }
 
-.gamified-theme .text-glow-cyan {
-  text-shadow: 0 0 5px var(--arcade-neon-cyan), 0 0 15px var(--arcade-neon-cyan);
+.gamified-theme .text-glow-white {
+  text-shadow: 0 0 5px var(--theme-white), 0 0 15px var(--theme-white);
 }
 
-.gamified-theme .box-arcade {
-  border: 1px solid var(--arcade-neon-cyan);
-  background: rgba(10, 5, 20, 0.85);
+.gamified-theme .box-theme {
+  border: 1px solid var(--theme-main-red);
+  background: rgba(10, 0, 0, 0.85);
   box-shadow:
-    0 0 10px rgba(0, 255, 255, 0.3),
-    inset 0 0 20px rgba(0, 255, 255, 0.1);
+    0 0 10px rgba(229, 9, 20, 0.3),
+    inset 0 0 20px rgba(229, 9, 20, 0.1);
   position: relative;
   backdrop-filter: blur(10px);
 }
 
 /* Corner Accents for Box */
-.gamified-theme .box-arcade::after {
+.gamified-theme .box-theme::after {
   content: '';
   position: absolute;
   bottom: -2px;
   right: -2px;
   width: 20px;
   height: 20px;
-  border-bottom: 2px solid var(--arcade-neon-pink);
-  border-right: 2px solid var(--arcade-neon-pink);
+  border-bottom: 2px solid var(--theme-white);
+  border-right: 2px solid var(--theme-white);
 }
 
-.gamified-theme .btn-arcade {
+.gamified-theme .btn-theme {
   font-family: 'Press Start 2P', cursive;
   text-transform: uppercase;
   border: none;
   position: relative;
-  background: linear-gradient(180deg, rgba(255, 0, 255, 0.2) 0%, rgba(80, 0, 80, 0.5) 100%);
+  background: linear-gradient(180deg, rgba(229, 9, 20, 0.2) 0%, rgba(80, 0, 0, 0.5) 100%);
   color: white;
   transition: all 0.2s;
   box-shadow:
-    inset 0 0 0 2px var(--arcade-neon-pink),
-    0 0 10px var(--arcade-neon-pink);
+    inset 0 0 0 2px var(--theme-main-red),
+    0 0 10px var(--theme-main-red);
   transform: translateY(0);
   overflow: hidden;
 }
 
 /* Gradient Shine on Hover */
-.gamified-theme .btn-arcade::before {
+.gamified-theme .btn-theme::before {
   content: '';
   position: absolute;
   top: 0;
@@ -135,16 +136,16 @@
   transition: 0.5s;
 }
 
-.gamified-theme .btn-arcade:hover::before {
+.gamified-theme .btn-theme:hover::before {
   left: 100%;
 }
 
-.gamified-theme .btn-arcade:active {
+.gamified-theme .btn-theme:active {
   transform: translateY(2px);
-  box-shadow: inset 0 0 0 2px var(--arcade-neon-pink);
+  box-shadow: inset 0 0 0 2px var(--theme-main-red);
 }
 
-.gamified-theme .btn-arcade:disabled {
+.gamified-theme .btn-theme:disabled {
   filter: grayscale(100%);
   opacity: 0.5;
   cursor: not-allowed;
@@ -205,34 +206,34 @@
 
 /* 3D Button Style for Options */
 .gamified-theme .btn-3d {
-  background: linear-gradient(to bottom, #2a0a3b, #150520);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(to bottom, #1a0000, #050000);
+  border: 1px solid rgba(229, 9, 20, 0.3);
   box-shadow:
     0 4px 0 #000,
-    0 5px 10px rgba(0, 0, 0, 0.5);
+    0 5px 10px rgba(0, 0, 0, 0.8);
   transition: transform 0.1s, box-shadow 0.1s;
 }
 
 /* Glassmorphism Card */
 .gamified-theme .glass-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(229, 9, 20, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
   transition: all 0.3s ease;
 }
 
 .gamified-theme .glass-card:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 0, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(229, 9, 20, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 40px rgba(229, 9, 20, 0.2);
 }
 
 /* Gradient Avatar */
 .gamified-theme .avatar-gradient {
-  background: linear-gradient(135deg, var(--arcade-neon-cyan), var(--arcade-neon-purple));
-  box-shadow: 0 0 15px var(--arcade-neon-cyan);
+  background: linear-gradient(135deg, var(--theme-main-red), var(--theme-dark-red));
+  box-shadow: 0 0 15px var(--theme-main-red);
   border: 2px solid rgba(255, 255, 255, 0.8);
 }
 
@@ -257,26 +258,12 @@
   animation: shine 3s infinite;
 }
 
-@keyframes shine {
-  0% {
-    left: -100%;
-  }
-
-  20% {
-    left: 200%;
-  }
-
-  100% {
-    left: 200%;
-  }
-}
-
-/* Confetti Particle (Basic CSS) */
+/* Particle */
 .gamified-theme .particle {
   position: absolute;
   width: 8px;
   height: 8px;
-  background: var(--arcade-neon-yellow);
+  background: var(--theme-white);
   pointer-events: none;
-  border-radius: 50%;
+  border-radius: 0; /* Square particles for sleek theme */
 }

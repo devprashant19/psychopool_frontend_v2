@@ -29,9 +29,9 @@ const RoundLoadingScreen: React.FC = () => {
       <motion.div
         animate={{
           background: [
-            'radial-gradient(circle at 50% 50%, hsl(var(--neon-cyan) / 0.2) 0%, transparent 50%)',
-            'radial-gradient(circle at 50% 50%, hsl(var(--neon-magenta) / 0.2) 0%, transparent 50%)',
-            'radial-gradient(circle at 50% 50%, hsl(var(--neon-cyan) / 0.2) 0%, transparent 50%)',
+            'radial-gradient(circle at 50% 50%, hsl(var(--theme-red) / 0.2) 0%, transparent 50%)',
+            'radial-gradient(circle at 50% 50%, hsl(var(--theme-white) / 0.2) 0%, transparent 50%)',
+            'radial-gradient(circle at 50% 50%, hsl(var(--theme-red) / 0.2) 0%, transparent 50%)',
           ],
         }}
         transition={{ duration: 2, repeat: Infinity }}
@@ -82,13 +82,13 @@ const RoundLoadingScreen: React.FC = () => {
               transition={{ duration: 3, ease: 'linear' }}
               style={{
                 strokeDasharray: '283',
-                filter: 'drop-shadow(0 0 10px hsl(var(--neon-cyan)))',
+                filter: 'drop-shadow(0 0 10px hsl(var(--theme-red)))',
               }}
             />
             <defs>
               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="hsl(var(--neon-cyan))" />
-                <stop offset="100%" stopColor="hsl(var(--neon-magenta))" />
+                <stop offset="0%" stopColor="hsl(var(--theme-red))" />
+                <stop offset="100%" stopColor="hsl(var(--theme-white))" />
               </linearGradient>
             </defs>
           </motion.svg>
@@ -135,12 +135,12 @@ const RoundLoadingScreen: React.FC = () => {
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-        className="absolute top-20 left-10 w-20 h-20 border border-neon-cyan/20 rounded-full"
+        className="absolute top-20 left-10 w-20 h-20 border border-theme-red/20 rounded-full"
       />
       <motion.div
         animate={{ rotate: -360 }}
         transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-        className="absolute bottom-20 right-10 w-32 h-32 border border-neon-magenta/20 rounded-full"
+        className="absolute bottom-20 right-10 w-32 h-32 border border-theme-white/20 rounded-full"
       />
     </div>
   );
