@@ -163,10 +163,12 @@ const AdminDashboard: React.FC = () => {
           <Zap className="w-10 h-10 text-theme-red" />
           <div>
             <h1 className="text-3xl font-display font-bold neon-text-cyan">Psycho Pool</h1>
-            <div className="flex items-center gap-2">
-              <p className="text-muted-foreground">Admin Control Panel</p>
+            <div className="flex items-center gap-2 mt-1">
               <span className="flex items-center text-xs text-theme-success bg-theme-success/10 px-2 py-0.5 rounded-full border border-theme-success/20">
                 <Wifi className="w-3 h-3 mr-1" /> Online & Authenticated
+              </span>
+              <span className="flex items-center text-xs text-cyan-400 bg-cyan-400/10 px-3 py-0.5 rounded-full border border-cyan-400/20 font-bold">
+                <Users className="w-3 h-3 mr-1.5" /> {playerCount} Players
               </span>
             </div>
           </div>
