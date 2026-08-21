@@ -24,6 +24,7 @@ import {
 const AdminDashboard: React.FC = () => {
   const {
     gameState,
+    players,
     playerCount,
     minorityResult,
     startRound,
@@ -321,6 +322,33 @@ const AdminDashboard: React.FC = () => {
               </Card>
             </motion.div>
           )}
+
+          {/* LEADERBOARD PANEL */}
+          {gameState === 'LEADERBOARD' && players.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
+              <Card className="card-glow border-yellow-500/20">
+                <CardHeader>
+                  <CardTitle className="text-yellow-500 flex items-center gap-2">
+                    <Trophy className="w-6 h-6" /> Live Leaderboard
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[500px] overflow-y-auto pr-2">
+                    {players.map((p, index) => (
+                      <div key={p.userId} className="flex justify-between items-center p-3 rounded-lg bg-black/40 border border-white/10 hover:border-yellow-500/50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <span className="text-lg font-bold text-yellow-500 w-8">#{p.rank || index + 1}</span>
+                          <span className="font-semibold text-white">{p.name}</span>
+                        </div>
+                        <span className="font-mono text-cyan-400 font-bold">{p.score} pts</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
         </div>
       </div>
     </div>
