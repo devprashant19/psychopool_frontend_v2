@@ -39,11 +39,11 @@ const ResultScreen: React.FC = () => {
             className="flex items-center justify-center gap-2"
           >
             {isChaos ? (
-              <Flame className="w-8 h-8 text-red-500 animate-pulse" />
+              <Flame className="w-8 h-8 text-theme-red animate-pulse" />
             ) : (
-              <Gem className="w-8 h-8 text-theme-success" />
+              <Gem className="w-8 h-8 text-white" />
             )}
-            <h1 className={`text-3xl font-display font-bold ${isChaos ? 'text-red-500' : 'text-theme-success'}`}>
+            <h1 className={`text-3xl font-display font-bold ${isChaos ? 'text-theme-red' : 'text-white'}`}>
               {isChaos ? 'MAJORITY WINS!' : 'MINORITY WINS!'}
             </h1>
           </motion.div>
@@ -54,9 +54,9 @@ const ResultScreen: React.FC = () => {
         </div>
 
         {/* Results Card */}
-        <div className={`box-theme p-6 md:p-10 ${isChaos ? 'border-red-500 shadow-[0_0_40px_rgba(239,68,68,0.4)]' : 'border-theme-success shadow-[0_0_40px_rgba(74,222,128,0.4)]'}`}>
+        <div className={`box-theme p-6 md:p-10 ${isChaos ? 'border-theme-red shadow-[0_0_40px_rgba(220,38,38,0.4)]' : 'border-white/30 shadow-[0_0_40px_rgba(255,255,255,0.15)]'}`}>
           <div className="mb-4 text-center">
-            <h2 className={`flex items-center justify-center gap-2 text-xl font-display font-bold uppercase tracking-widest ${isChaos ? 'text-red-400 text-glow-white' : 'text-theme-success text-glow-red'}`}>
+            <h2 className={`flex items-center justify-center gap-2 text-xl font-display font-bold uppercase tracking-widest ${isChaos ? 'text-theme-red drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]' : 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]'}`}>
               <BarChart3 className="w-6 h-6" />
               Vote Stats
             </h2>
@@ -74,7 +74,7 @@ const ResultScreen: React.FC = () => {
                   className="space-y-1"
                 >
                   <div className="flex justify-between text-sm font-medium">
-                    <span className={isWinner ? (isChaos ? "text-red-500 font-bold" : "text-theme-success font-bold") : "text-gray-400"}>
+                    <span className={isWinner ? (isChaos ? "text-theme-red font-bold" : "text-white font-bold") : "text-gray-400"}>
                       {option} {isWinner && (isChaos ? "🔥" : "👑")}
                     </span>
                     <span className="text-white">{count} votes</span>
@@ -87,8 +87,8 @@ const ResultScreen: React.FC = () => {
                       transition={{ duration: 1, ease: "easeOut" }}
                       className={`h-full ${isWinner
                         ? (isChaos
-                          ? 'bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.8)]'
-                          : 'bg-gradient-to-r from-theme-success to-emerald-600 shadow-[0_0_20px_hsl(var(--theme-success))]')
+                          ? 'bg-theme-red shadow-[0_0_15px_rgba(220,38,38,0.8)]'
+                          : 'bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)]')
                         : 'bg-gradient-to-r from-gray-700 to-gray-800'
                         }`}
                     />
