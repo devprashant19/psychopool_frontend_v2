@@ -32,7 +32,10 @@ const AdminDashboard: React.FC = () => {
     revealResults,
     showLeaderboard,
     endRound,
-    resetGame
+    resetGame,
+    totalQuestionsInRound,
+    gotoQuestion,
+    currentRound
   } = useGame();
 
   const [isConnected, setIsConnected] = useState(socketService.isConnected());
@@ -279,6 +282,24 @@ const AdminDashboard: React.FC = () => {
                   <span>End Round</span>
                 </Button>
               </div>
+
+              {currentRound > 0 && totalQuestionsInRound > 0 && (
+                <div className="mt-6 border-t border-gray-800 pt-6">
+                  <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">Jump to Question</h3>
+                  <div className="grid grid-cols-5 gap-2">
+                    {Array.from({ length: totalQuestionsInRound }).map((_, i) => (
+                      <Button
+                        key={i}
+                        variant="outline"
+                        className="h-12 border-gray-700 hover:bg-gray-800 hover:text-white text-lg font-bold bg-gray-900/50"
+                        onClick={() => handleAction(`Go to Q${i + 1}`, () => gotoQuestion(i))}
+                      >
+                        Q {i + 1}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 

@@ -18,6 +18,7 @@ interface GameContextType {
   gameState: GameState;
   currentRound: number;
   totalRounds: number;
+  totalQuestionsInRound: number;
   players: Player[];
   currentQuestion: Question | null;
   playerCount: number;
@@ -33,6 +34,7 @@ interface GameContextType {
   endRound: () => void;
   resetGame: () => void;
   revealResults: () => void;
+  gotoQuestion: (index: number) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -47,6 +49,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [gameState, setGameState] = useState<GameState>("DISCONNECTED");
   const [currentRound, setCurrentRound] = useState(0);
   const [totalRounds] = useState(10);
+  const [totalQuestionsInRound, setTotalQuestionsInRound] = useState(0);
   const [players, setPlayers] = useState<Player[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [playerCount, setPlayerCount] = useState(0);
@@ -98,6 +101,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     socketService.on("round_start", (data) => {
       setCurrentRound(data.round);
+      if (data.totalQuestions) setTotalQuestionsInRound(data.totalQuestions);
       setGameState("ROUND_LOADING");
     });
 
@@ -136,6 +140,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.log("🔄 Restoring Admin State:", data);
       setGameState(data.phase);
       setCurrentRound(data.round);
+      if (data.totalQuestions) setTotalQuestionsInRound(data.totalQuestions);
       if (data.question) setCurrentQuestion(data.question);
       else setCurrentQuestion(null);
       if (data.result) setMinorityResult(data.result);
@@ -209,6 +214,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const showLeaderboard = () => socketService.emit("admin_show_leaderboard");
   const endRound = () => socketService.emit("admin_end_round");
   const resetGame = () => socketService.emit("admin_reset_game");
+  const gotoQuestion = (index: number) => socketService.emit("admin_goto_question", { questionIndex: index });
 
   const revealResults = () => {
     socketService.emit("admin_reveal_results");
@@ -219,6 +225,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       gameState,
       currentRound,
       totalRounds,
+      totalQuestionsInRound,
       players,
       currentQuestion,
       playerCount,
@@ -233,6 +240,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       endRound,
       resetGame,
       revealResults,
+      gotoQuestion,
     }}>
       {children}
     </GameContext.Provider>
