@@ -91,7 +91,6 @@ const QuestionScreen: React.FC = () => {
           </div>
           <div className="flex justify-between mt-2 text-xs text-muted-foreground font-display tracking-widest uppercase">
             <span>Mission Status: ACTIVE</span>
-            <span>Q-{currentQuestion.id} // 10</span>
           </div>
         </div>
 
