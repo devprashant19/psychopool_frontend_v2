@@ -35,15 +35,15 @@ const LoginScreen: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-center mb-10"
         >
-          <div className="inline-flex items-center gap-3 mb-4 relative">
+          <div className="inline-flex flex-wrap justify-center items-center gap-2 sm:gap-3 mb-4 relative text-center">
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <Zap className="w-16 h-16 text-theme-red animate-pulse-fast" style={{ filter: 'drop-shadow(0 0 10px hsl(var(--theme-red)))' }} />
+              <Zap className="w-12 h-12 sm:w-16 sm:h-16 text-theme-red animate-pulse-fast shrink-0" style={{ filter: 'drop-shadow(0 0 10px hsl(var(--theme-red)))' }} />
             </motion.div>
-            <h1 className="text-5xl font-display font-bold text-white drop-shadow-lg" style={{ textShadow: '0 0 10px hsl(var(--theme-white))' }}>
-              Psycho Pool <span className="ml-2 text-3xl animate-bounce"></span>
+            <h1 className="text-4xl sm:text-5xl font-display font-bold text-white drop-shadow-lg leading-tight" style={{ textShadow: '0 0 10px hsl(var(--theme-white))' }}>
+              Psycho Pool
             </h1>
           </div>
           <p className="text-glow-white text-lg font-bold tracking-widest uppercase mb-2">
