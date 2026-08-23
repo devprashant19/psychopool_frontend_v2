@@ -41,7 +41,7 @@
     --theme-white: 0 0% 100%;
     --theme-gray: 0 0% 50%;
     --theme-dark: 0 0% 10%;
-    --theme-success: 142 76% 36%;
+    --theme-success: 0 0% 100%; /* Changed from green to white */
 
     /* Gradients */
     --gradient-theme: linear-gradient(135deg, hsl(var(--theme-red)), hsl(var(--theme-dark)));

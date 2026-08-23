@@ -80,11 +80,11 @@ const QuestionScreen: React.FC = () => {
               <div
                 key={i}
                 className={`flex-1 transition-colors duration-200 skew-x-[-12deg] border border-black/20 ${i < activeSegments
-                    ? (timeLeft <= 5 ? 'bg-theme-red animate-pulse-fast' : 'bg-gradient-to-r from-theme-red to-blue-500')
+                    ? (timeLeft <= 5 ? 'bg-theme-red animate-pulse-fast' : 'bg-gradient-to-r from-theme-red to-white')
                     : 'bg-gray-800/30'
                   }`}
                 style={{
-                  boxShadow: i < activeSegments ? `0 0 8px ${timeLeft <= 5 ? 'red' : 'cyan'}` : 'none'
+                  boxShadow: i < activeSegments ? `0 0 8px ${timeLeft <= 5 ? 'red' : 'white'}` : 'none'
                 }}
               />
             ))}

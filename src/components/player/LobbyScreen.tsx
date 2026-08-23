@@ -49,11 +49,11 @@ const LobbyScreen: React.FC = () => {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="mt-8 flex items-center gap-2 px-6 py-3 bg-black/50 border-2 border-theme-gray shadow-[0_0_15px_rgba(255,255,0,0.3)] backdrop-blur-md skew-x-[-10deg]"
+        className="mt-8 flex items-center gap-2 px-6 py-3 bg-black/50 border-2 border-theme-gray shadow-[0_0_15px_rgba(255,255,255,0.3)] backdrop-blur-md skew-x-[-10deg]"
       >
         <Users className="w-4 h-4 text-theme-gray" />
         <span className="font-bold text-theme-gray">{playerCount}</span>
-        <span className="text-sm text-gray-400">Players Waiting</span>
+        <span className="text-sm text-theme-gray">Players Waiting</span>
       </motion.div>
 
       {/* 3. Player List (The part causing your 'key' warning previously) */}
@@ -66,13 +66,13 @@ const LobbyScreen: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="bg-black/40 border-b-2 border-r-2 border-theme-success/50 backdrop-blur-sm rounded-none">
+            <Card className="bg-black/40 border-b-2 border-r-2 border-theme-white/50 backdrop-blur-sm rounded-none">
               <CardContent className="p-3 flex items-center justify-center text-center">
-                <span className="font-bold text-sm truncate text-theme-success font-display uppercase tracking-wider">
+                <span className="font-bold text-sm truncate text-white font-display uppercase tracking-wider">
                   {player.name}
                 </span>
                 {/* Ready Indicator */}
-                <div className="w-2 h-2 ml-2 bg-theme-success rounded-full animate-ping" />
+                <div className="w-2 h-2 ml-2 bg-white rounded-full animate-ping" />
               </CardContent>
             </Card>
           </motion.div>

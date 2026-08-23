@@ -21,7 +21,7 @@
   --theme-accent-red: #ff1a1a;
   --theme-main-red: #e50914;
   --theme-white: #ffffff;
-  --theme-success: #00ff41; /* Keep a green for correct states if needed, but mostly use white/red */
+  --theme-success: #ffffff; /* Changed from green to white */
   --theme-dark-red: #8b0000;
   --theme-gray: #444444;
 

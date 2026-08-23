@@ -26,16 +26,16 @@ const LeaderboardScreen: React.FC = () => {
   };
 
   const rankColors = [
-    'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]', // Gold
-    'text-gray-300 drop-shadow-[0_0_8px_rgba(209,213,219,0.8)]', // Silver
-    'text-amber-600 drop-shadow-[0_0_8px_rgba(217,119,6,0.8)]',  // Bronze
+    'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]', // 1st
+    'text-theme-red drop-shadow-[0_0_8px_rgba(229,9,20,0.8)]', // 2nd
+    'text-gray-400 drop-shadow-[0_0_8px_rgba(156,163,175,0.8)]',  // 3rd
   ];
 
   return (
     <div className="min-h-screen flex flex-col p-4 bg-background relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-grid opacity-30" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.1),transparent)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05),transparent)]" />
       <motion.div
         animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }}
         transition={{ duration: 4, repeat: Infinity }}
@@ -53,8 +53,8 @@ const LeaderboardScreen: React.FC = () => {
           className="text-center mb-8 mt-12"
         >
           <div className="inline-flex items-center gap-3 mb-2">
-            <Trophy className="w-10 h-10 text-yellow-400 animate-bounce drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" />
-            <h1 className="text-3xl font-display font-bold text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)] uppercase tracking-widest">
+            <Trophy className="w-10 h-10 text-white animate-bounce drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+            <h1 className="text-3xl font-display font-bold text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] uppercase tracking-widest">
               {gameState === 'GAME_OVER' ? 'GAME OVER' : 'TOP RANK'}
             </h1>
           </div>
@@ -111,10 +111,10 @@ const LeaderboardScreen: React.FC = () => {
                   transition={{ delay: delays[podiumIndex] + 0.3, duration: 0.4 }}
                   className={`w-16 md:w-32 ${heights[podiumIndex]} 
                     ${podiumIndex === 0
-                      ? 'bg-gradient-to-b from-yellow-400 to-yellow-700 border-x-4 border-t-4 border-yellow-200 animate-shine shadow-[0_0_50px_rgba(250,204,21,0.6)]'
+                      ? 'bg-gradient-to-b from-white to-gray-400 border-x-4 border-t-4 border-white animate-shine shadow-[0_0_50px_rgba(255,255,255,0.6)]'
                       : podiumIndex === 1
-                      ? 'bg-gradient-to-b from-gray-300 to-gray-600 border-x-2 border-t-2 border-gray-100 shadow-[0_0_30px_rgba(209,213,219,0.4)]'
-                      : 'bg-gradient-to-b from-amber-600 to-amber-900 border-x-2 border-t-2 border-amber-400 shadow-[0_0_30px_rgba(217,119,6,0.4)]'
+                      ? 'bg-gradient-to-b from-theme-red to-red-900 border-x-2 border-t-2 border-theme-red shadow-[0_0_30px_rgba(229,9,20,0.4)]'
+                      : 'bg-gradient-to-b from-gray-700 to-black border-x-2 border-t-2 border-gray-500 shadow-[0_0_30px_rgba(100,100,100,0.4)]'
                     }
                     relative overflow-hidden`}
                 >
@@ -140,11 +140,11 @@ const LeaderboardScreen: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.6 }}
-            className="mb-6 mx-4 p-4 rounded-xl bg-theme-red/10 border border-theme-red/30 neon-border-cyan"
+            className="mb-6 mx-4 p-4 rounded-xl bg-theme-red/10 border border-theme-white shadow-[0_0_15px_rgba(255,255,255,0.2)]"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="w-8 h-8 rounded-full bg-gradient-to-br from-theme-red to-blue-600 text-white flex items-center justify-center font-display font-bold shadow-lg">
+                <span className="w-8 h-8 rounded-full bg-gradient-to-br from-theme-red to-black border border-white text-white flex items-center justify-center font-display font-bold shadow-lg">
                   {myRank}
                 </span>
                 <span className="font-semibold text-theme-red">
