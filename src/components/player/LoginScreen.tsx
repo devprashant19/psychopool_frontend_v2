@@ -107,20 +107,6 @@ const LoginScreen: React.FC = () => {
           </motion.div>
         </motion.form>
 
-        {/* Quick Tips Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.5 }}
-          className="mt-8 mb-2 bg-black/30 border-l-4 border-theme-gray/60 p-4 rounded-xl shadow-md"
-        >
-          <h3 className="text-theme-gray font-bold mb-1 text-base">Quick Tips:</h3>
-          <ul className="text-muted-foreground text-xs list-disc list-inside space-y-1">
-            <li>Use a fun nickname for the leaderboard!</li>
-            <li>Fastest answers get more points.</li>
-            <li>Wait for the host to start the game.</li>
-          </ul>
-        </motion.div>
 
         {/* Footer hint */}
         <motion.p
