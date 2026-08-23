@@ -157,26 +157,25 @@ const AdminDashboard: React.FC = () => {
     );
   }
 
-  // --- VIEW 2: CONTROL DASHBOARD ---
   return (
-    <div className="min-h-screen bg-background bg-grid p-6">
+    <div className="min-h-screen bg-background bg-grid p-4 sm:p-6 overflow-x-hidden">
       {/* Header */}
-      <motion.div className="flex items-center justify-between mb-8">
+      <motion.div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
         <div className="flex items-center gap-4">
-          <Zap className="w-10 h-10 text-theme-red" />
+          <Zap className="w-10 h-10 text-theme-red shrink-0" />
           <div>
-            <h1 className="text-3xl font-display font-bold neon-text-cyan">Psycho Pool</h1>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="flex items-center text-xs text-theme-success bg-theme-success/10 px-2 py-0.5 rounded-full border border-theme-success/20">
-                <Wifi className="w-3 h-3 mr-1" /> Online & Authenticated
+            <h1 className="text-3xl font-display font-bold neon-text-cyan leading-none">Psycho Pool</h1>
+            <div className="flex flex-wrap items-center gap-2 mt-2">
+              <span className="flex items-center text-xs text-theme-success bg-theme-success/10 px-2 py-1 rounded-full border border-theme-success/20">
+                <Wifi className="w-3 h-3 mr-1" /> Online & Auth
               </span>
-              <span className="flex items-center text-xs text-cyan-400 bg-cyan-400/10 px-3 py-0.5 rounded-full border border-cyan-400/20 font-bold">
+              <span className="flex items-center text-xs text-cyan-400 bg-cyan-400/10 px-3 py-1 rounded-full border border-cyan-400/20 font-bold">
                 <Users className="w-3 h-3 mr-1.5" /> {playerCount} Players
               </span>
             </div>
           </div>
         </div>
-        <Button variant="outline" size="sm" onClick={() => handleAction("Reset", resetGame)}>
+        <Button variant="outline" size="sm" onClick={() => handleAction("Reset", resetGame)} className="w-full md:w-auto">
           <RotateCcw className="w-4 h-4 mr-2" />
           Force Reset
         </Button>
@@ -221,7 +220,7 @@ const AdminDashboard: React.FC = () => {
               >
                 <Button
                   onClick={toggleMode}
-                  className={`w-full h-16 text-lg font-bold uppercase tracking-wider border-2 transition-all duration-300 ${winningMode === 'MAJORITY'
+                  className={`w-full min-h-[4rem] h-auto py-3 text-sm sm:text-base md:text-lg font-bold uppercase tracking-wider border-2 transition-all duration-300 whitespace-normal text-center ${winningMode === 'MAJORITY'
                     ? 'bg-green-600 hover:bg-green-700 border-green-400 text-white shadow-[0_0_20px_rgba(22,163,74,0.5)]'
                     : 'bg-red-600 hover:bg-red-700 border-red-400 text-white shadow-[0_0_20px_rgba(220,38,38,0.5)]'
                     }`}
@@ -240,45 +239,45 @@ const AdminDashboard: React.FC = () => {
                 </Button>
               </motion.div>
 
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
                 <Button
-                  className="h-20 flex-col gap-2 bg-cyan-600 hover:bg-cyan-500 text-white"
+                  className="h-20 flex-col gap-1 sm:gap-2 bg-cyan-600 hover:bg-cyan-500 text-white text-xs sm:text-sm whitespace-normal text-center px-1"
                   onClick={() => handleAction("Start Round", startRound)}
                 >
-                  <Play className="w-6 h-6" />
+                  <Play className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                   <span>Start Round</span>
                 </Button>
 
                 <Button
-                  className="h-20 flex-col gap-2 bg-fuchsia-600 hover:bg-fuchsia-500 text-white"
+                  className="h-20 flex-col gap-1 sm:gap-2 bg-fuchsia-600 hover:bg-fuchsia-500 text-white text-xs sm:text-sm whitespace-normal text-center px-1"
                   onClick={() => handleAction("Next Question", nextQuestion)}
                 >
-                  <SkipForward className="w-6 h-6" />
+                  <SkipForward className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                   <span>Next Q</span>
                 </Button>
 
                 <Button
-                  className="h-20 flex-col gap-2 bg-purple-600 hover:bg-purple-500 text-white"
+                  className="h-20 flex-col gap-1 sm:gap-2 bg-purple-600 hover:bg-purple-500 text-white text-xs sm:text-sm whitespace-normal text-center px-1"
                   onClick={() => handleAction("Reveal Results", revealResults)}
                 >
-                  <Eye className="w-6 h-6" />
+                  <Eye className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                   <span>Reveal</span>
                 </Button>
 
                 <Button
-                  className="h-20 flex-col gap-2 bg-yellow-500 hover:bg-yellow-400 text-black"
+                  className="h-20 flex-col gap-1 sm:gap-2 bg-yellow-500 hover:bg-yellow-400 text-black text-xs sm:text-sm whitespace-normal text-center px-1"
                   onClick={() => handleAction("Leaderboard", showLeaderboard)}
                 >
-                  <Trophy className="w-6 h-6" />
+                  <Trophy className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                   <span>Leaderboard</span>
                 </Button>
 
                 <Button
                   variant="destructive"
-                  className="h-20 flex-col gap-2"
+                  className="h-20 flex-col gap-1 sm:gap-2 text-xs sm:text-sm whitespace-normal text-center px-1"
                   onClick={() => handleAction("End Round", endRound)}
                 >
-                  <StopCircle className="w-6 h-6" />
+                  <StopCircle className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
                   <span>End Round</span>
                 </Button>
               </div>
@@ -286,7 +285,7 @@ const AdminDashboard: React.FC = () => {
               {currentRound > 0 && totalQuestionsInRound > 0 && (
                 <div className="mt-6 border-t border-gray-800 pt-6">
                   <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">Jump to Question</h3>
-                  <div className="grid grid-cols-5 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2">
                     {Array.from({ length: totalQuestionsInRound }).map((_, i) => (
                       <Button
                         key={i}
@@ -308,7 +307,7 @@ const AdminDashboard: React.FC = () => {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <Card className="card-glow border-theme-red/20">
                 <CardHeader>
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                     <CardTitle>Vote Distribution</CardTitle>
                     {/* 👇 Display Active Mode in Results */}
                     <span className={`text-xs font-bold px-2 py-1 rounded ${winningMode === 'MAJORITY' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'
