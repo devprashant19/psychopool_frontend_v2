@@ -105,6 +105,10 @@ const QuestionScreen: React.FC = () => {
 
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 auto-rows-fr">
           {currentQuestion.options.map((option, index) => {
+            const isSelected = selectedIdx === index;
+            const isCorrect = serverResult?.winningOptions.includes(option);
+            const showResult = serverResult !== null;
+
             let buttonStyle = `border-white/50 text-white bg-black/40 hover:border-white hover:bg-white/10`;
 
             if (isSelected) {
