@@ -80,15 +80,7 @@ const LoginScreen: React.FC = () => {
               maxLength={12}
               className="text-center text-xl bg-transparent border-none text-white font-display uppercase tracking-widest placeholder:text-gray-600 focus-visible:ring-0"
             />
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="ml-2 px-2 py-1 text-xs border-theme-white text-theme-white hover:bg-theme-white/10"
-              onClick={() => setNickname(["SHARKY","ACE","MAVERICK","QUEEN","POOLSTAR","LUCKY","BLAZE","STRIKE","MAGIC","WIZ","BOSS"][Math.floor(Math.random()*11)])}
-            >
-              🎲 Random
-            </Button>
+
           </div>
 
           <motion.div
