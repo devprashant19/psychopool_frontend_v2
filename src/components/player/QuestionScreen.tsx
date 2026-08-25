@@ -154,13 +154,13 @@ const QuestionScreen: React.FC = () => {
                 <div className="flex items-center gap-4">
                   <span className={`
                     w-12 h-12 flex items-center justify-center font-display font-bold text-xl border-2
-                    ${isSelected || (showResult && isCorrect) ? 'text-black bg-white border-white' : `${color.text} border-current bg-transparent`}
+                    ${isSelected || (showResult && isCorrect) ? 'text-black bg-white border-white' : `${color.text} border-white bg-transparent`}
                   `}>
                     {showResult && isCorrect ? <Check className="w-5 h-5" /> :
                       showResult && isSelected && !serverResult.correct ? <X className="w-5 h-5" /> :
                         String.fromCharCode(65 + index)}
                   </span>
-                  <span className="flex-1 text-foreground">{option}</span>
+                  <span className="flex-1 text-foreground">{option.replace(/^[A-D]\.\s/, '')}</span>
                 </div>
               </motion.button>
             );
