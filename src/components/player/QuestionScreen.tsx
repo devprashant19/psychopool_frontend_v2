@@ -112,7 +112,7 @@ const QuestionScreen: React.FC = () => {
             let buttonStyle = `border-white/50 text-white bg-black/40 hover:border-white hover:bg-white/10`;
 
             if (isSelected) {
-              buttonStyle = `border-theme-red bg-white/20 text-white shadow-[0_0_20px_hsl(var(--theme-red)/0.7)]`;
+              buttonStyle = `border-theme-red bg-theme-red/30 backdrop-blur-md text-white shadow-[inset_0_0_20px_rgba(229,9,20,0.4),0_0_25px_rgba(229,9,20,0.6)]`;
             }
 
             if (showResult) {
