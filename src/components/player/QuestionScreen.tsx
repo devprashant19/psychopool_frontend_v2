@@ -4,12 +4,7 @@ import { useGame } from '@/contexts/GameContext';
 import { Check, X, Loader2 } from 'lucide-react';
 import socketService from '@/services/socketService';
 
-const optionColors = [
-  { bg: 'bg-theme-red/20', border: 'border-theme-red', text: 'text-theme-red', shadow: 'shadow-[0_0_20px_hsl(var(--theme-red)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--theme-red))]' },
-  { bg: 'bg-theme-red/20', border: 'border-theme-red', text: 'text-theme-red', shadow: 'shadow-[0_0_20px_hsl(var(--theme-red)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--theme-red))]' },
-  { bg: 'bg-theme-gray/20', border: 'border-theme-gray', text: 'text-theme-gray', shadow: 'shadow-[0_0_20px_hsl(var(--theme-gray)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--theme-gray))]' },
-  { bg: 'bg-theme-success/20', border: 'border-theme-success', text: 'text-theme-success', shadow: 'shadow-[0_0_20px_hsl(var(--theme-success)/0.5)]', glow: 'shadow-[0_0_30px_hsl(var(--theme-success))]' },
-];
+// Removed unused optionColors array since all options now start white
 
 const QuestionScreen: React.FC = () => {
 
@@ -110,24 +105,16 @@ const QuestionScreen: React.FC = () => {
 
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 auto-rows-fr">
           {currentQuestion.options.map((option, index) => {
-            const color = optionColors[index % 4];
-
-            const isSelected = selectedIdx === index;
-
-            const isCorrect = serverResult?.winningOptions.includes(option);
-            const showResult = serverResult !== null;
-
-            let buttonStyle = `border-border bg-card/50 hover:${color.border} hover:${color.bg}`;
+            let buttonStyle = `border-white/50 text-white bg-black/40 hover:border-white hover:bg-white/10`;
 
             if (isSelected) {
-
-              buttonStyle = `${color.border} ${color.bg} ${color.shadow}`;
+              buttonStyle = `border-theme-red bg-white/20 text-white shadow-[0_0_20px_hsl(var(--theme-red)/0.7)]`;
             }
 
             if (showResult) {
-              if (isCorrect) buttonStyle = 'border-theme-success bg-theme-success/20 shadow-[0_0_25px_hsl(var(--theme-success)/0.6)]';
-              else if (isSelected && !serverResult.correct) buttonStyle = 'border-theme-red bg-theme-red/20 shadow-[0_0_25px_hsl(var(--theme-red)/0.6)]';
-              else buttonStyle = 'opacity-50 border-border';
+              if (isCorrect) buttonStyle = 'border-theme-success bg-theme-success/20 shadow-[0_0_25px_hsl(var(--theme-success)/0.6)] text-white';
+              else if (isSelected && !serverResult.correct) buttonStyle = 'border-theme-red bg-theme-red/20 shadow-[0_0_25px_hsl(var(--theme-red)/0.6)] text-white';
+              else buttonStyle = 'opacity-50 border-white/20 bg-black/40 text-white/50';
             }
 
             return (
@@ -147,20 +134,18 @@ const QuestionScreen: React.FC = () => {
                 whileTap={!isLocked ? { scale: 0.95 } : {}}
                 style={{
                   clipPath: 'polygon(0 0, 100% 0, 95% 100%, 0% 100%)',
-                  background: isSelected ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.5)',
-                  boxShadow: isSelected || (showResult && isCorrect) ? color.glow : 'none'
                 }}
               >
                 <div className="flex items-center gap-4">
                   <span className={`
                     w-12 h-12 flex items-center justify-center font-display font-bold text-xl border-2
-                    ${isSelected || (showResult && isCorrect) ? 'text-black bg-white border-white' : `${color.text} border-white bg-transparent`}
+                    ${isSelected || (showResult && isCorrect) ? 'text-black bg-white border-white' : 'text-white border-white bg-transparent'}
                   `}>
                     {showResult && isCorrect ? <Check className="w-5 h-5" /> :
                       showResult && isSelected && !serverResult.correct ? <X className="w-5 h-5" /> :
                         String.fromCharCode(65 + index)}
                   </span>
-                  <span className="flex-1 text-foreground">{option.replace(/^[A-D]\.\s/, '')}</span>
+                  <span className="flex-1 text-inherit">{option.replace(/^[A-D]\.\s/, '')}</span>
                 </div>
               </motion.button>
             );
