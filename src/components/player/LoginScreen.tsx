@@ -77,7 +77,7 @@ const LoginScreen: React.FC = () => {
               placeholder="PLAYER 1 NAME"
               value={nickname}
               onChange={(e) => setNickname(e.target.value.toUpperCase())}
-              maxLength={12}
+              maxLength={50}
               className="text-center text-xl bg-transparent border-none text-white font-display uppercase tracking-widest placeholder:text-gray-600 focus-visible:ring-0"
             />
 

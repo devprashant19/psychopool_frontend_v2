@@ -96,7 +96,7 @@ const LeaderboardScreen: React.FC = () => {
                     {getRankIcon(player.rank || podiumIndex + 1)}
                   </span>
 
-                  <p className={`font-display font-bold text-sm mt-1 ${isCurrentUser ? 'text-theme-red' : 'text-foreground'}`}>
+                  <p className={`font-display font-bold text-sm mt-1 w-full px-2 truncate ${isCurrentUser ? 'text-theme-red' : 'text-foreground'}`}>
                     {player.name}
                   </p>
                   <p className="text-muted-foreground text-xs font-display">
@@ -182,9 +182,9 @@ const LeaderboardScreen: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col">
-                      <span className={`font-bold text-lg tracking-wide ${isCurrentUser ? 'text-theme-red text-glow-red' : 'text-white'}`}>
+                      <span className={`font-bold text-lg tracking-wide truncate max-w-[200px] sm:max-w-xs ${isCurrentUser ? 'text-theme-red text-glow-red' : 'text-white'}`}>
                         {player.name}
-                        {isCurrentUser && <span className="ml-2 text-xs bg-theme-red text-black px-1 rounded">YOU</span>}
+                        {isCurrentUser && <span className="ml-2 text-xs bg-theme-red text-black px-1 rounded inline-block align-middle">YOU</span>}
                       </span>
                     </div>
                   </div>
